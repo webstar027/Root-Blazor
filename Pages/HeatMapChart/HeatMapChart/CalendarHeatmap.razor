@@ -1,0 +1,53 @@
+﻿@page "/heatmap-chart/calendar-heatmap"
+
+@using Syncfusion.Blazor.HeatMap
+@using SFHeatMap = Syncfusion.Blazor.HeatMap
+@using sf_blazor_heatmapdata
+@inherits SampleBaseComponent;
+
+<div class="control-section">
+    <div class="row">
+        <div class="col-md-12">
+            <SfHeatMap DataSource="@DataSource" Height="300px">
+                <HeatMapTitle Text="Annual Summary of User Activities in GitLab" TextStyle="@TextStyle"></HeatMapTitle>
+                <HeatMapXAxis OpposedPosition="true"
+                              Minimum="@XMinimum"
+                              Maximum="@XMaximum"
+                              IntervalType="@SFHeatMap.IntervalType.Days"
+                              ValueType="@SFHeatMap.ValueType.DateTime"
+                              LabelFormat="MMM"
+                              ShowLabelOn="@SFHeatMap.LabelType.Months"
+                              Increment="7"
+                              LabelIntersectAction="@SFHeatMap.LabelIntersectAction.Rotate45">
+                </HeatMapXAxis>
+                <HeatMapYAxis Labels="@YLabels" IsInversed="true"></HeatMapYAxis>
+                <HeatMapPaletteSettings Type="@SFHeatMap.PaletteType.Fixed" EmptyPointColor="white">
+                    <HeatMapPalettes>
+                        <HeatMapPalette Value="0" Color="rgb(238,238,238)" Label="No contributions"></HeatMapPalette>
+                        <HeatMapPalette Value="1" Color="rgb(172, 213, 242)" Label="1-15 contributions"></HeatMapPalette>
+                        <HeatMapPalette Value="16" Color="rgb(127, 168, 201)" Label="16-31 contributions"></HeatMapPalette>
+                        <HeatMapPalette Value="32" Color="rgb(82, 123, 160)" Label="31-49 contributions"></HeatMapPalette>
+                        <HeatMapPalette Value="50" Color="rgb(37, 78, 119)" Label="50+ contributions"></HeatMapPalette>
+                    </HeatMapPalettes>
+                </HeatMapPaletteSettings>
+                <HeatMapCellSettings ShowLabel="false" Border="@Border"></HeatMapCellSettings>
+                <HeatMapLegendSettings ShowLabel="true"
+                                       Position="@SFHeatMap.LegendPosition.Bottom"
+                                       Width="20%"
+                                       Alignment="@SFHeatMap.Alignment.Near"
+                                       LabelDisplayType="@SFHeatMap.LabelDisplayType.None"
+                                       EnableSmartLegend="true">
+                </HeatMapLegendSettings>
+            </SfHeatMap>
+        </div>
+    </div>
+</div>
+
+@code{
+    string[] YLabels = new string[] { "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat" };
+    FontModel TextStyle = new FontModel() { Size = "15px", FontWeight = "500", FontStyle = "Normal" };
+    DateTime XMinimum = new DateTime(2017, 6, 23);
+    DateTime XMaximum = new DateTime(2018, 6, 30);
+    BorderModel Border = new BorderModel() { Color = "White" };
+    int?[,] DataSource = HeatMapData.GetCalendarData();
+}

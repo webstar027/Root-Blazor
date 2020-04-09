@@ -1,0 +1,99 @@
+﻿@page "/chart/export"
+@using Syncfusion.Blazor.Charts
+@using Syncfusion.Blazor.Buttons
+@inject NavigationManager NavigationManager
+@inherits SampleBaseComponent;
+
+<div class="row">
+    <div class="control-section col-lg-9" align="center">
+       
+        <SfChart @ref="ChartObj" Title="Top 10 Countries Using Solar Power">
+            <ChartEvents Load="ChartLoad" />
+            <ChartArea><ChartAreaBorder Width="0"></ChartAreaBorder></ChartArea>
+            <ChartPrimaryXAxis Title="Country" ValueType="Syncfusion.Blazor.Charts.ValueType.Category" Interval="1">
+                <ChartAxisMajorGridLines Width="0"></ChartAxisMajorGridLines>
+            </ChartPrimaryXAxis>
+            <ChartPrimaryYAxis Minimum="0" Maximum="40" Interval="10" Title="Measurements" LabelFormat="{value}GW">
+                <ChartAxisMajorGridLines Width="0"></ChartAxisMajorGridLines>
+            </ChartPrimaryYAxis>
+            <ChartSeriesCollection>
+                <ChartSeries DataSource="@DataSource" XName="xValue" YName="yValue" Type="ChartSeriesType.Column">
+                </ChartSeries>
+            </ChartSeriesCollection>
+            <ChartTooltipSettings Enable="true"></ChartTooltipSettings>
+        </SfChart>
+    </div>
+    <div class="col-lg-3 property-section" align="center">
+        <table  style="width: 100%">
+            <tr style="height:50px"><th>Properties</th></tr>
+            <tbody>
+                <tr id="button-control" style="height: 50px" align="center">
+                    <td>
+                        <SfButton  @onclick="ExportChart" Content="Export" CssClass="e-flat" IsPrimary="true"></SfButton>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+@code{
+    SfChart ChartObj;
+    public class ExportData
+    {
+        public string xValue { get; set; }
+        public double yValue { get; set; }
+    }
+    public List<ExportData> DataSource = new List<ExportData>
+    {
+        new ExportData {xValue="DEZ", yValue = 35.5},
+        new ExportData {xValue="CHN", yValue = 18.3},
+        new ExportData {xValue="ITA", yValue = 17.6},
+        new ExportData {xValue="JPN", yValue = 13.6},
+        new ExportData {xValue="US", yValue = 12},
+        new ExportData {xValue="ESP", yValue = 5.6},
+        new ExportData {xValue="FRA", yValue = 4.6},
+        new ExportData {xValue="AUS", yValue = 3.3},
+        new ExportData {xValue="BEL", yValue = 3},
+        new ExportData {xValue="UK", yValue = 2.9},
+    };
+    public void ExportChart(MouseEventArgs args)
+    {
+        ChartObj.Export(ExportType.PNG, "Chart");
+    }
+
+    string CurrentUri;
+
+    void ChartLoad(ILoadedEventArgs Args)
+    {
+        CurrentUri = NavigationManager.Uri;
+        if (CurrentUri.IndexOf("material") > -1)
+        {
+            Args.Theme = ChartTheme.Material;
+        }
+        else if (CurrentUri.IndexOf("fabric") > -1)
+        {
+            Args.Theme = ChartTheme.Fabric;
+        }
+        else if (CurrentUri.IndexOf("bootstrap") > -1)
+        {
+            Args.Theme = ChartTheme.Bootstrap;
+        }
+        else if (CurrentUri.IndexOf("highcontrast") > -1)
+        {
+            Args.Theme = ChartTheme.HighContrast;
+        }
+        else
+        {
+            Args.Theme = ChartTheme.Bootstrap4;
+        }
+    }
+}
+<style>
+    #control-container {
+        padding: 0px !important;
+    }
+
+    .e-play-icon::before {
+        content: '\e720';
+    }
+</style>

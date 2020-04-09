@@ -1,0 +1,83 @@
+﻿@page "/AutoComplete/Data-Binding"
+
+@using Syncfusion.Blazor.DropDowns
+@using Syncfusion.Blazor.Data
+
+@inherits SampleBaseComponent;
+
+<div class="control-section col-lg-12">
+    <div id="local-data" class="col-lg-6">
+        <div class="content">
+            <h4>Local Data</h4>
+            <SfAutoComplete TValue="string" TItem="Countries" Placeholder="e.g. Australia" DataSource="@Country" Autofill=true>
+                <AutoCompleteFieldSettings Value="Name"></AutoCompleteFieldSettings>
+            </SfAutoComplete>
+        </div>
+    </div>
+    <div id="remote-data" class="col-lg-6">
+        <div class="content">
+            <h4>Remote Data</h4>
+            <SfAutoComplete TValue="string" TItem="OrderDetails" Placeholder="Select a name" Query="@RemoteDataQuery" Autofill="true">
+                <SfDataManager Url="https://js.syncfusion.com/demos/ejServices/Wcf/Northwind.svc/Orders" CrossDomain="true" Adaptor="Syncfusion.Blazor.Adaptors.ODataAdaptor"></SfDataManager>
+                <AutoCompleteFieldSettings Text="CustomerID" Value="CustomerID"></AutoCompleteFieldSettings>
+            </SfAutoComplete>
+        </div>
+    </div>
+</div>
+
+<style>
+    #local-data, #remote-data {
+        max-width: 270px;
+        margin: 25px 60px;
+        padding-top: 15px;
+    }
+</style>
+
+@code{
+    public class Countries
+    {
+        public string Name { get; set; }
+
+        public string Code { get; set; }
+    }
+
+    public List<Countries> Country = new List<Countries>
+{
+        new Countries() { Name = "Australia", Code = "AU" },
+        new Countries() { Name = "Bermuda", Code = "BM" },
+        new Countries() { Name = "Canada", Code = "CA" },
+        new Countries() { Name = "Cameroon", Code = "CM" },
+        new Countries() { Name = "Denmark", Code = "DK" },
+        new Countries() { Name = "France", Code = "FR" },
+        new Countries() { Name = "Finland", Code = "FI" },
+        new Countries() { Name = "Germany", Code = "DE" },
+        new Countries() { Name = "Greenland", Code = "GL" },
+        new Countries() { Name = "Hong Kong", Code = "HK" },
+        new Countries() { Name = "India", Code = "IN" },
+        new Countries() { Name = "Italy", Code = "IT" },
+        new Countries() { Name = "Japan", Code = "JP" },
+        new Countries() { Name = "Mexico", Code = "MX" },
+        new Countries() { Name = "Norway", Code = "NO" },
+        new Countries() { Name = "Poland", Code = "PL" },
+        new Countries() { Name = "Switzerland", Code = "CH" },
+        new Countries() { Name = "United Kingdom", Code = "GB" },
+        new Countries() { Name = "United States", Code = "US" },
+    };
+    public Query RemoteDataQuery = new Query().Select(new List<string> { "CustomerID" }).Take(6).RequiresCount();
+    public class OrderDetails
+    {
+        public int? OrderID { get; set; }
+        public string CustomerID { get; set; }
+        public int? EmployeeID { get; set; }
+        public double? Freight { get; set; }
+        public string ShipCity { get; set; }
+        public bool Verified { get; set; }
+        public DateTime? OrderDate { get; set; }
+        public string ShipName { get; set; }
+        public string ShipCountry { get; set; }
+        public DateTime? ShippedDate { get; set; }
+        public string ShipAddress { get; set; }
+    }
+    
+}
+

@@ -1,0 +1,25 @@
+﻿@page "/DatePicker/Month-Picker"
+
+@using Syncfusion.Blazor.Calendars
+
+@inherits SampleBaseComponent;
+
+<div class="control-section">
+    <div id="wrapper" class="datepicker-section">
+        <div id="datepicker-control">
+            <SfDatePicker TValue="DateTime?" Value="@DateValue" Placeholder="Choose a date" Format="MMMM yyyy" Start="CalendarView.Year" Depth="CalendarView.Year"></SfDatePicker>
+        </div>
+    </div>
+</div>
+
+@code {
+    public DateTime DateValue { get; set; } = DateTime.Now;
+}
+
+<style>
+    #wrapper {
+        max-width: 250px;
+        margin: 0px auto;
+        padding-top: 70px;
+    }
+</style>

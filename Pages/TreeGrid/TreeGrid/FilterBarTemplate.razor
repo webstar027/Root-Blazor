@@ -1,0 +1,78 @@
+﻿@page "/tree-grid/filter-bar-template"
+
+@using Syncfusion.Blazor.TreeGrid
+@using Syncfusion.Blazor.Grids
+@using Syncfusion.Blazor.Data
+@using Syncfusion.Blazor.DropDowns
+
+@*Hidden:Lines*@
+@using ej2_blazor_selfdata
+@inherits SampleBaseComponent;
+@*End:Hidden*@
+
+
+
+<div class="col-lg-12 control-section">
+    <div class="content-wrapper">
+        <div class="row">
+            <SfTreeGrid @ref="TreeGrid" Height=315 DataSource="TreeGridData" IdMapping="TaskID" ParentIdMapping="ParentID" TreeColumnIndex="1" AllowFiltering="true">
+                <TreeGridColumns>
+                    <TreeGridColumn Field="TaskID" HeaderText="Task ID" Width="80" TextAlign="TextAlign.Right"></TreeGridColumn>
+                    <TreeGridColumn Field="TaskName" HeaderText="Task Name" Width="145"></TreeGridColumn>
+                    <TreeGridColumn Field="StartDate" HeaderText="Start Date" Format="d" Type=ColumnType.Date Width="100" TextAlign="TextAlign.Right"></TreeGridColumn>
+                    <TreeGridColumn Field="Progress" HeaderText="Progress" Width="100">
+                        <FilterTemplate>
+                            <SfDropDownList TValue="string" TItem="DDLData" DataSource="@DropdownData">
+                                <DropDownListEvents ValueChange="Change" TValue="string"></DropDownListEvents>
+                                <DropDownListFieldSettings Text="Text" Value="Value"></DropDownListFieldSettings>
+                            </SfDropDownList>
+                        </FilterTemplate>
+                    </TreeGridColumn>
+                    <TreeGridColumn Field="Duration" HeaderText="Duration" Width="85" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Right"></TreeGridColumn>
+                    <TreeGridColumn Field="Priority" HeaderText="Priority" Width="89" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Right"></TreeGridColumn>
+                </TreeGridColumns>
+            </SfTreeGrid>
+        </div>
+    </div>
+</div>
+
+
+
+@code{
+    SfTreeGrid<SelfReferenceData> TreeGrid;
+
+    public List<SelfReferenceData> TreeGridData { get; set; }
+
+    public List<DDLData> DropdownData { get; set; } = new List<DDLData> {
+        new DDLData { Text = "In Progress", Value = "In Progress" },
+        new DDLData { Text = "Open", Value = "Open" },
+        new DDLData { Text = "Validated", Value = "Validated" },
+        new DDLData { Text = "Closed", Value = "Closed" },
+        new DDLData { Text = "All", Value = "All" }
+    };
+
+    public string FilterValue { get; set; } = "All";
+
+    protected override void OnInitialized()
+    {
+        this.TreeGridData = SelfReferenceData.GetTree().Take(12).ToList();
+    }
+
+    public class DDLData
+    {
+        public string Text { get; set; }
+        public string Value { get; set; }
+    }
+
+    public void Change(Syncfusion.Blazor.DropDowns.ChangeEventArgs<string> Args)
+    {
+        if (Args.Value == "All")
+        {
+            this.TreeGrid.ClearFiltering();
+        }
+        else
+        {
+            this.TreeGrid.FilterByColumn("Progress", "equal", Args.Value);
+        }
+    }
+}

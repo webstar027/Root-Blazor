@@ -1,0 +1,24 @@
+@page "/"
+
+@using blazor_samples
+@using Newtonsoft.Json
+@using Microsoft.AspNetCore.Components
+
+@inject Microsoft.AspNetCore.Components.NavigationManager UriHelper
+
+@code{
+
+    //protected override void OnAfterRender(bool firstRender)
+    //{
+    //    if (firstRender)
+    //    {
+    //        UriHelper.NavigateTo("Grid/DefaultFunctionalities?theme=material", forceLoad: true);
+    //    }
+    //}
+
+    protected override void OnInitialized()
+    {
+        UriHelper.NavigateTo("datagrid/overview?theme=bootstrap4");
+    }
+
+}

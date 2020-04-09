@@ -1,0 +1,49 @@
+﻿@page "/pivot-table/default-functionalities"
+
+@using Syncfusion.Blazor.PivotView
+@inherits SampleBaseComponent;
+@using blazor_samples
+@using ej2_blazor_productdetails
+
+
+<div class="control-section">
+    <div class="content-wrapper">
+        <SfPivotView TValue="PivotProductDetails" Height="340" EnableValueSorting=true>
+            <PivotViewDataSourceSettings DataSource="@Data" ExpandAll=false EnableSorting=true>
+                <PivotViewColumns>
+                    <PivotViewColumn Name="Year"></PivotViewColumn>
+                    <PivotViewColumn Name="Quarter"></PivotViewColumn>
+                </PivotViewColumns>
+                <PivotViewRows>
+                    <PivotViewRow Name="Country"></PivotViewRow>
+                    <PivotViewRow Name="Products"></PivotViewRow>
+                </PivotViewRows>
+                <PivotViewValues>
+                    <PivotViewValue Name="Sold" Caption="Units Sold"></PivotViewValue>
+                    <PivotViewValue Name="Amount" Caption="Sold Amount"></PivotViewValue>
+                </PivotViewValues>
+                <PivotViewFormatSettings>
+                    <PivotViewFormatSetting Name="Amount" Format="C0" UseGrouping=true></PivotViewFormatSetting>
+                </PivotViewFormatSettings>
+            </PivotViewDataSourceSettings>
+            <PivotViewGridSettings ColumnWidth="120"></PivotViewGridSettings>
+        </SfPivotView>
+    </div>
+</div>
+
+<style>
+    .e-pivotview {
+        min-height: 200px;
+    }
+</style>
+
+@code{
+
+    public List<PivotProductDetails> Data { get; set; }
+
+    protected override void OnInitialized()
+    {
+        this.Data = PivotProductDetails.GetProductData();
+    }
+
+}

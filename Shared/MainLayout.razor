@@ -1,0 +1,203 @@
+@inherits LayoutComponentBase
+@using blazor_samples
+@using Syncfusion.Blazor.Navigations;
+@using Syncfusion.Blazor.DropDowns;
+@using Syncfusion.Blazor.Buttons;
+@using Microsoft.AspNetCore.Components;
+@using Syncfusion.Blazor;
+@inject Microsoft.AspNetCore.Components.NavigationManager UriHelper;
+@inject IJSRuntime JsRuntime;
+@inject SampleService Service;
+
+<CascadingValue Value="@this">
+    <SpinnerComponent @ref="SpinnerObj"></SpinnerComponent>
+    <div class="sample-browser e-view sf-new">
+        <div class="sb-mobile-overlay sb-hide"></div>
+        <HeaderComponent OnToggleClick="@OnToggleClick" OnRightToggleClick="@OnRightToggleClick"></HeaderComponent>
+        <div class="sb-content e-view">
+            <LeftPaneComponent @ref="LeftPaneObject"></LeftPaneComponent>
+            <RightPaneComponent Body="@Body" @ref="RightPaneObj"></RightPaneComponent>
+            <SfSidebar ID="right-sidebar" @ref="MobilePreferences" EnableGestures="false" Position="@Position" Type="@Type">
+                <ChildContent>
+                    <div class="sb-left-pane-header">
+                        <div class="sb-setting-header">Preferences</div>
+                    </div>
+                    <div class="sb-setting-item sb-setting-theme-section">
+                        <div class="sb-icons sb-setting-icons sb-icon-Palette"></div>
+                        <div class="sb-setting-text">Theme Selection</div>
+                        <SfDropDownList ID="mobileTheme" TValue="string" TItem="typeData" PopupWidth="180px" DataSource="@data">
+                            <DropDownListEvents ValueChange="ThemeChange" TValue="string"></DropDownListEvents>
+                            <DropDownListFieldSettings Text="text" Value="text"></DropDownListFieldSettings>
+                        </SfDropDownList>
+                    </div>
+                    @*<div class="sb-name">Choose Theme</div>*@
+                </ChildContent>
+            </SfSidebar>
+            @*<div class="sb-body-overlay sb-hide">
+                    <div class="sb-loading">
+                        <svg class="circular" height="40" width="40">
+                            <circle class="path" cx="25" cy="25" r="20" fill="none" stroke-width="6" stroke-miterlimit="10" />
+                        </svg>
+                    </div>
+                </div>*@
+        <div class='sb-mobilefooter e-view sample-navigation' id='mobile-footer'>
+           <SfButton ID="mobile-prev-sample" IsPrimary="true" CssClass="e-flat sb-navigation-prev sb-left" Disabled="@IsPrevDisabled" OnClick="OnPrevSampleClick" Content="PREVIOUS"></SfButton>
+           <SfButton ID="mobile-next-sample" IsPrimary="true" CssClass="e-flat sb-navigation-next sb-right" Disabled="@IsNextDisabled" OnClick="OnNextSampleClick" Content="NEXT"></SfButton>
+        </div>
+        </div>
+    </div>
+</CascadingValue>
+@code {
+
+    public SfSidebar MobilePreferences { get; set; }
+
+    public LeftPaneComponent LeftPaneObject { get; set; }
+
+    public SidebarPosition Position { get; set; } = SidebarPosition.Right;
+
+    public SidebarType Type { get; set; } = SidebarType.Push;
+
+    [Parameter]
+    public string controlName { get; set; } = "ControlName";
+
+    public bool IsPrevDisabled { get; set; } = true;
+
+    public bool IsNextDisabled { get; set; }
+
+    public SpinnerComponent SpinnerObj { get; set; }
+
+    public RightPaneComponent RightPaneObj { get; set; }
+
+    [Parameter]
+    public string theme { get; set; }
+
+    public class typeData
+    {
+        public string text { get; set; }
+    }
+
+    private List<typeData> data { get; set; } = new List<typeData> {
+        new typeData { text = "Material" },
+        new typeData { text = "Fabric" },
+        new typeData { text = "Bootstrap" },
+        new typeData { text = "High Contrast" },
+        new typeData { text = "Bootstrap V4" }
+    };
+
+    private void ThemeChange(Syncfusion.Blazor.DropDowns.ChangeEventArgs<string> args)
+    {
+        JsRuntime.InvokeAsync<string>("mobileThemeChange", args.Value.ToString());
+    }
+
+    public void prevSample()
+    {
+        IsPrevDisabled = Service.Data.CurrentSample.Url == SampleBrowser.SampleUrls[1] ? true : false;
+        if (!IsPrevDisabled) { IsNextDisabled = false; }
+    }
+
+    public void nextSample()
+    {
+        var count = SampleBrowser.SampleUrls.Count;
+        if (IsPrevDisabled) { IsPrevDisabled = false; }
+        IsNextDisabled = Service.Data.CurrentSample.Url == SampleBrowser.SampleUrls[count - 2] ? true : false;
+    }
+    public void MobileState(string currenturl)
+    {
+        var count = SampleBrowser.SampleUrls.Count;
+        IsPrevDisabled = currenturl == SampleBrowser.SampleUrls[0] ? true : false;
+        IsNextDisabled = currenturl == SampleBrowser.SampleUrls[count - 1] ? true : false;
+    }
+
+    public void OnPrevSampleClick()
+    {
+        this.prevSample();
+        JsRuntime.InvokeAsync<Object>("persistTheme");
+        var currentUrl = Service.Data.CurrentSample.Url;
+        int CurrentIndex = SampleBrowser.SampleUrls.IndexOf(currentUrl);
+        if (CurrentIndex != 0)
+        {
+            UriHelper.NavigateTo(SampleBrowser.SampleUrls[CurrentIndex - 1].ToString());
+            JsRuntime.InvokeAsync<Object>("destroyControl", new List<string>());
+        }
+    }
+
+    public void OnNextSampleClick()
+    {
+        this.nextSample();
+        JsRuntime.InvokeAsync<Object>("persistTheme");
+        var currentUrl = Service.Data.CurrentSample.Url;
+        int CurrentIndex = SampleBrowser.SampleUrls.IndexOf(currentUrl);
+        UriHelper.NavigateTo(SampleBrowser.SampleUrls[CurrentIndex + 1].ToString());
+        JsRuntime.InvokeAsync<Object>("destroyControl", new List<string>());
+    }
+
+    public List<TabItem> sourceCodeItems;
+
+    private async Task OnToggleClick()
+    {
+        await this.LeftPaneObject.SideBar.Toggle();
+        await JsRuntime.InvokeAsync<string>("callResizeEvent");
+    }
+
+    public async Task OnRightToggleClick()
+    {
+        await JsRuntime.InvokeAsync<Object>("mobileSideBarVisibility");
+        await this.MobilePreferences.Toggle();
+        await JsRuntime.InvokeAsync<Object>("mobileThemePersist");
+    }
+
+    protected override bool ShouldRender()
+    {
+        return true;
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        //Spinner.PropertyChanged = this.OnPropertyChanged;
+        Service.Notify += OnNotify;
+        //UriHelper.NavigateTo("Buttons/DefaultFunctionalities?theme=material");
+    }
+
+    public async Task OnNotify(NotifyProperties prop)
+    {
+        await InvokeAsync(() =>
+        {
+            this.SpinnerObj.Hide();
+            this.Service.Prop.HideSpinner = false;
+            this.Service.Prop.RestricMouseEvents = false;
+
+        });
+    }
+
+    public void UpdateBreadCrumb(string control, string category, string sample)
+    {
+        this.RightPaneObj.UpdateBreadCrumb(control, category, sample);
+
+    }
+
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await base.OnAfterRenderAsync(firstRender);
+        if (UriHelper.Uri.IndexOf("material") > 0)
+        {
+            JsRuntime.Sf().EnableRipple(true);
+        }
+        else
+        {
+            JsRuntime.Sf().EnableRipple(false);
+        }
+        if(this.SpinnerObj.TransClass == "sb-trans")
+        {
+            this.SpinnerObj.Hide();
+            this.Service.Prop.HideSpinner = false;
+            this.Service.Prop.RestricMouseEvents = false;
+        }
+    }
+    
+    public void Dispose()
+    {
+        Service.Notify -= OnNotify;
+    }
+}

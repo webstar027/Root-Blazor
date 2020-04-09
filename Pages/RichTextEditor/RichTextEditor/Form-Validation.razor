@@ -1,0 +1,56 @@
+﻿@page "/rich-text-editor/form-validation"
+
+@using Syncfusion.Blazor
+@using Syncfusion.Blazor.RichTextEditor
+@using System.ComponentModel.DataAnnotations;
+
+@inherits SampleBaseComponent;
+
+<div class="control-section">
+    <div class="content-wrapper">
+        <div id='content' class='box-form' style="margin: 0 auto; max-width:750px; padding:25px">
+            <EditForm Model="@Model" >
+                <DataAnnotationsValidator />
+                <SfRichTextEditor ShowCharCount="true" @bind-Value="@Model.Description" MaxLength="100" Placeholder="Type something...">
+                </SfRichTextEditor>
+                <ValidationMessage For="@(() => Model.Description)" />
+                <div class="btn-grp">
+                    <button class="samplebtn e-control e-btn" type="reset" data-ripple="true">Reset</button>
+                    <button class="samplebtn e-control e-btn" type="submit" data-ripple="true">Submit</button>
+                </div>
+            </EditForm>
+        </div>
+    </div>
+</div>
+<style>
+    .box-form {
+        webkit-box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.12), 0 1px 5px 0 rgba(0, 0, 0, 0.2);
+        box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.12), 0 1px 5px 0 rgba(0, 0, 0, 0.2);
+    }
+    .btn-grp {
+        text-align: center;
+        margin-top: 15px;
+    }
+
+     .validation-message {
+        color: #f44336;
+        font-family: "Roboto", "Segoe UI", "GeezaPro", "DejaVu Serif", "sans-serif", "-apple-system", "BlinkMacSystemFont";
+        font-size: 12px;
+        font-weight: normal;
+    }
+
+</style>
+
+@code {
+
+
+    public class FormModel
+    {
+        [Required]
+        [MinLength(20, ErrorMessage = "Please enter at least 20 characters.")]
+        public string Description { get; set; }
+    }
+
+    public FormModel Model = new FormModel();
+}
+

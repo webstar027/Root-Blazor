@@ -1,0 +1,24 @@
+﻿@page "/rich-text-editor/inline"
+
+@using Syncfusion.Blazor
+@using Syncfusion.Blazor.RichTextEditor
+
+
+@inherits SampleBaseComponent;
+
+<div class="control-section" id="pageHeight">
+    <SfRichTextEditor>
+        <ChildContent>
+            <p>The sample is configured with inline mode of editor. Initially, the editor is rendered without a <a href='https://blazor.syncfusion.com/home/' target='_blank'>toolbar</a>. The toolbar becomes visible only when the content is selected.</p>
+            <RichTextEditorToolbarSettings Items="@ToolsForInline"></RichTextEditorToolbarSettings>
+            <RichTextEditorInlineMode Enable="true" OnSelection="true"></RichTextEditorInlineMode>
+        </ChildContent>        
+    </SfRichTextEditor>
+</div>
+
+@code {
+    public object[] ToolsForInline = new object[]{
+        "Bold", "Italic", "Underline","Formats",  "-", "Alignments", "OrderedList", "UnorderedList","CreateLink"
+    };
+}
+

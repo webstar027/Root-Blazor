@@ -1,0 +1,154 @@
+@page "/treemap/print"
+
+
+@using Syncfusion.Blazor.TreeMap
+@using Syncfusion.Blazor.Inputs
+@using Syncfusion.Blazor.DropDowns
+@using Syncfusion.Blazor.Buttons
+@inherits SampleBaseComponent;
+
+
+<div class="col-lg-9 control-section">
+    <div>
+        <SfTreeMap @ref="@TreemapRef" WeightValuePath="Percentage" RangeColorValuePath="Percentage" DataSource="@Datasource"
+                    LayoutType="LayoutMode.SliceAndDiceVertical">
+            <TreeMapTitleSettings Text="Top 10 best selling smartphone brands - 2017">
+            </TreeMapTitleSettings>
+            <TreeMapTooltipSettings Visible="true" Format="${Product} (+${Percentage}) %"></TreeMapTooltipSettings>
+            <TreeMapLeafItemSettings LabelPath="Product" Fill="#6699cc" LabelFormat="${Product} (+${Percentage}) %"
+                                     LabelPosition="Syncfusion.Blazor.TreeMap.LabelPosition.Center">
+                <TreeMapLeafColorMappings>
+                    <TreeMapLeafColorMapping From="1.3" To="22" Color='@("#FAB665")' MinOpacity="0.5" MaxOpacity="1"></TreeMapLeafColorMapping>
+                </TreeMapLeafColorMappings>
+                <TreeMapLeafBorder Color="black" Width="0.5">
+                </TreeMapLeafBorder>
+            </TreeMapLeafItemSettings>
+        </SfTreeMap>
+    </div>
+    <div style="float: right; margin-right: 10px;">
+        Source:
+        <a href="http://zeenews.india.com/photos/business/worlds-10-best-selling-smartphone-brands-2033958/samsung-2033959" target="_blank">zeenews.india.com</a>
+    </div>
+</div>
+<div class="col-lg-3 property-section">
+    <div class="property-panel-section">
+    <div class="property-panel-header">Properties</div>
+    <div class="property-panel-content">
+    <table style="width: 120%">
+        <tbody>
+            <tr style="height: 50px">
+                <td style="width: 40%">
+                    <div class="property-text">Export Type</div>
+                </td>
+                <td style="width: 60%;">
+                    <div style="width:60%;margin-left: 10px">
+                        <SfDropDownList TValue="string" TItem="Typelist" DataSource="@fileTypes" Value="@fileType">
+                            <DropDownListEvents TValue="string" ValueChange="treemapValueChange"></DropDownListEvents>
+                            <DropDownListFieldSettings Text="Name" Value="Name"></DropDownListFieldSettings>
+                        </SfDropDownList>
+                    </div>
+                </td>
+            </tr>
+            <tr style="height: 50px">
+                <td style="width: 40%">
+                    <div class="property-text">File Name</div>
+                </td>
+                <td style="width: 60%;">
+                    <div style="width:90px;margin-left:10px">
+                        <SfTextBox Value="@fileName" ValueChange="@nameChange" Placeholder="TreeMap" ></SfTextBox>
+                    </div>
+                </td>
+            </tr>
+            <tr style="height: 60px">
+                <td style="width: 50%;padding-left: 7%;">
+                        <SfButton Content="Export" OnClick="exportClick" CssClass="e-info" IsToggle="true" IsPrimary="true">
+                        </SfButton>
+                </td>
+                <td style="width: 50%;">
+                    <SfButton @onclick="PrintButton" IsPrimary="true" CssClass="e-info">Print</SfButton>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+</div>
+</div>
+</div>
+
+@code {
+    private String fileType { get; set; } = "JPEG";
+    private String fileName { get; set; } = "TreeMap";
+    SfTreeMap<SmartPhoneData> TreemapRef;
+
+    public string FileName { get; set; } = "TreeMap";
+    public string ExportValue { get; set; } = "JPEG";
+    public class Typelist
+    {
+        public String Name { get; set; }
+    }
+    private List<Typelist> fileTypes = new List<Typelist> {
+        new Typelist { Name="JPEG" },
+        new Typelist { Name="PNG" },
+        new Typelist { Name="SVG" },
+        new Typelist { Name="PDF" }
+    };
+    private void treemapValueChange(Syncfusion.Blazor.DropDowns.ChangeEventArgs<string> args)
+    {
+        fileType = args.Value;
+    }
+    private void nameChange(Syncfusion.Blazor.Inputs.ChangedEventArgs args)
+    {
+        fileName = args.Value;
+    }
+    private void exportClick(MouseEventArgs args)
+    {
+        ExportType exportFileType = ExportType.JPEG;
+        switch (fileType)
+        {
+            case "JPEG":
+                exportFileType = ExportType.JPEG;
+                break;
+            case "PNG":
+                exportFileType = ExportType.PNG;
+                break;
+            case "SVG":
+                exportFileType = ExportType.SVG;
+                break;
+            case "PDF":
+                exportFileType = ExportType.PDF;
+                break;
+        }
+        TreemapRef.Export(exportFileType, fileName);
+    }
+    public void PrintButton()
+    {
+        TreemapRef.Print();
+    }
+
+    public class SmartPhoneData
+    {
+        public string Product;
+        public double Percentage;
+    }
+    public class ColorMap
+    {
+        public double from;
+        public double to;
+        public double minOpacity;
+        public double maxOpacity;
+        public string color;
+    }
+    public List<SmartPhoneData> Datasource = new List<SmartPhoneData> {
+        new SmartPhoneData{ Product= "Samsung", Percentage= 22 },
+        new SmartPhoneData{ Product= "Apple", Percentage= 11.2 },
+        new SmartPhoneData{ Product= "Huawei", Percentage= 10.5},
+        new SmartPhoneData{ Product= "Oppo", Percentage= 8.4 },
+        new SmartPhoneData{ Product= "Vivo", Percentage= 6.6},
+        new SmartPhoneData{ Product= "Xiaomi", Percentage= 6.3 },
+        new SmartPhoneData{ Product= "LG", Percentage= 3.6 },
+        new SmartPhoneData{ Product= "ZTE", Percentage= 3.3},
+        new SmartPhoneData{ Product= "Lenovo", Percentage= 3.2},
+        new SmartPhoneData{ Product= "Alcate", Percentage= 1.3},
+
+    };
+}

@@ -1,0 +1,197 @@
+﻿@page "/TextBox/Default-Functionalities"
+
+@using Syncfusion.Blazor.Inputs
+
+@inherits SampleBaseComponent;
+
+<div class="col-lg-12 control-section">
+    <div class="content-wrapper">
+        <div class="row material2">
+            <div class="col-xs-6 col-sm-6 col-lg-6 col-md-6">
+                <b>Outlined and Filled</b>
+            </div>
+        </div>
+        <div class="row material2">
+            <div class="col-xs-6 col-sm-6 col-lg-6 col-md-6">
+                <SfTextBox CssClass="e-outline" Placeholder="Outlined" FloatLabelType="@FloatLabelType.Auto"></SfTextBox>
+            </div>
+            <div class="col-xs-6 col-sm-6 col-lg-6 col-md-6">
+                <SfTextBox CssClass="e-filled" Placeholder="Filled" FloatLabelType="@FloatLabelType.Auto"></SfTextBox>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-6 col-sm-6 col-lg-6 col-md-6">
+                <b>Floating Label</b>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-6 col-sm-6 col-lg-6 col-md-6">
+                <SfTextBox Placeholder="First Name" FloatLabelType="@FloatLabelType.Auto"></SfTextBox>
+            </div>
+            <div class="col-xs-6 col-sm-6 col-lg-6 col-md-6">
+                <SfTextBox CssClass="e-rtl" Placeholder="Last Name" FloatLabelType="@FloatLabelType.Auto"></SfTextBox>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12 col-sm-12 col-lg-12 col-md-12">
+                <SfTextBox Placeholder="Country" FloatLabelType="@FloatLabelType.Auto"></SfTextBox>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-6 col-sm-6 col-lg-6 col-md-6">
+                <b>Inputs</b>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-6 col-sm-6 col-lg-6 col-md-6">
+                <SfTextBox Type="text" Placeholder="Enter Name"></SfTextBox>
+            </div>
+            <div class="col-xs-6 col-sm-6 col-lg-6 col-md-6">
+                <SfTextBox Placeholder="Last Name" CssClass="e-rtl"></SfTextBox>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-6 col-sm-6 col-lg-6 col-md-6">
+                <SfTextBox Placeholder="Password" Value="Password" Type="password"></SfTextBox>
+            </div>
+            <div class="col-xs-6 col-sm-6 col-lg-6 col-md-6">
+                <SfTextBox Type="email" Placeholder="Enter Email"></SfTextBox>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-6 col-sm-6 col-lg-6 col-md-6">
+                <SfTextBox Enabled="false" Placeholder="Disabled" Type="text"></SfTextBox>
+            </div>
+            <div class="col-xs-6 col-sm-6 col-lg-6 col-md-6">
+                <SfTextBox Type="text" Placeholder="ReadOnly" Readonly="true"></SfTextBox>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-6 col-sm-6 col-lg-6 col-md-6">
+                <b>Validation States</b>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-4 col-sm-4 col-lg-4 col-md-4">
+                <SfTextBox Placeholder="Success" CssClass="e-success"></SfTextBox>
+            </div>
+            <div class="col-xs-4 col-sm-4 col-lg-4 col-md-4">
+                <SfTextBox Placeholder="Warning" CssClass="e-warning"></SfTextBox>
+            </div>
+            <div class="col-xs-4 col-sm-4 col-lg-4 col-md-4">
+                <SfTextBox Placeholder="Error" CssClass="e-error"></SfTextBox>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-6 col-sm-6 col-lg-6 col-md-6">
+                <b>Sizing</b>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-6 col-sm-6 col-lg-6 col-md-6 custom-padding-05">
+                <SfTextBox Placeholder="Small" CssClass="e-small" Type="text"></SfTextBox>
+            </div>
+            <div class="col-xs-6 col-sm-6 col-lg-6 col-md-6">
+                <SfTextBox Placeholder="Normal" CssClass="e-normal" Type="text"></SfTextBox>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-6 col-sm-6 col-lg-6 col-md-6">
+                <b>Input &amp; Elements</b>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-6 col-sm-6 col-lg-6 col-md-6">
+                <SfTextBox @ref="date" Placeholder="Date of Birth" Created="@onCreateDate"></SfTextBox>
+            </div>
+            <div class="col-xs-6 col-sm-6 col-lg-6 col-md-6">
+                <SfTextBox @ref="upload" Placeholder="Upload Picture" Created="@onCreateUpload"></SfTextBox>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .e-input-picture::before {
+        content: '\e335';
+        font-family: e-icons;
+    }
+
+    .e-input-calendar::before {
+        content: '\e901';
+        font-family: e-icons;
+        font-size: 13px;
+    }
+
+    .content-wrapper {
+        width: 90%;
+        margin: 0 auto;
+        min-width: 85px;
+    }
+
+        .content-wrapper div.row {
+            padding: 15px 0px;
+        }
+
+    .custom-padding-05 {
+        padding-top: 5px;
+    }
+
+    @@media only screen and (max-width: 480px) {
+        .content-wrapper {
+            width: 92%;
+        }
+
+        .col-xs-6,
+        .col-xs-4,
+        .col-xs-12 {
+            padding: 10px 5px;
+            width: 100%;
+        }
+
+        .content-wrapper div.row {
+            padding: 0px;
+        }
+    }
+
+    #description td {
+        vertical-align: top;
+    }
+
+    .e-outline.e-float-input,
+    .e-outline.e-float-input.e-control-wrapper {
+        margin-top: 0;
+    }
+
+    .fabric .row.material2,
+    .bootstrap .row.material2,
+    .bootstrap4 .row.material2,
+    .highcontrast .row.material2 {
+        display: none;
+    }
+
+    .e-upload-picture::before {
+        content: '\e335';
+        font-family: e-icons;
+    }
+
+    .bootstrap4 .e-upload-picture::before {
+        content: '\e769';
+        font-family: e-icons;
+    }
+</style>
+
+@code  {
+    SfTextBox date;
+    SfTextBox upload;
+
+    public void onCreateDate()
+    {
+        this.date.AddIcon("append", "e-date-icon");
+    }
+
+    public void onCreateUpload()
+    {
+        this.upload.AddIcon("prepend", "e-upload-picture");
+    }
+}

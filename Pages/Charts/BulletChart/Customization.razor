@@ -1,0 +1,124 @@
+﻿@page "/bullet-chart/customization"
+@using Syncfusion.Blazor.Charts
+@using Syncfusion.Blazor.Inputs
+@using Syncfusion.Blazor.Buttons
+@using Newtonsoft.Json.Linq;
+@inject NavigationManager NavigationManager
+
+@inherits SampleBaseComponent;
+
+<div class="row">
+    <div class="control-section col-md-8">
+        <SfBulletChart DataSource="@BulletChartData" ValueField="value" TargetField="target" Minimum="0" Maximum="3"
+                        Interval="0.5" Title="Package Downloads" Subtitle="in Thousands">
+            <BulletChartAnimation Enable="false"></BulletChartAnimation>
+            <BulletChartTooltip Enable="true"></BulletChartTooltip>
+            <BulletChartMinorTickLines Width="0"></BulletChartMinorTickLines>
+            <BulletChartRangeCollection>
+                <BulletChartRange End="1.5" Color="@RangeColor0"> </BulletChartRange>
+                <BulletChartRange End="2.5" Color="@RangeColor1"></BulletChartRange>
+                <BulletChartRange End="3" Color="@RangeColor2"></BulletChartRange>
+            </BulletChartRangeCollection>
+             <BulletChartEvents Load="BeforeRender"/>
+        </SfBulletChart>
+    </div>
+    <div class="col-md-4 property-section">
+        <table style="width: 100%">
+            <tr style="height:50px"><th>Properties</th></tr>
+            <tr style="height: 50px">
+                <td style="width: 60%">
+                    <div>Start Color:</div>
+                </td>
+                <td style="width: 40%;">
+                    <div align="center">
+                        <SfColorPicker Value="#599C20" Mode="ColorPickerMode.Palette" ValueChange="StartColor"></SfColorPicker>
+                    </div>
+                </td>
+            </tr>
+            <tr style="height: 50px">
+                <td style="width: 60%">
+                    <div>Middle Color:</div>
+                </td>
+                <td style="width: 40%;">
+                    <div align="center">
+                        <SfColorPicker Value="#EFC820" Mode="ColorPickerMode.Palette" ValueChange="MiddleColor"></SfColorPicker>
+                    </div>
+                </td>
+            </tr>
+            <tr style="height: 50px">
+                <td style="width: 60%">
+                    <div>End Color:</div>
+                </td>
+                <td style="width: 40%;">
+                    <div align="center">
+                        <SfColorPicker Value="#CA4218" Mode="ColorPickerMode.Palette" ValueChange="EndColor"></SfColorPicker>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+@code{
+    
+    public string RangeColor0 = "#599C20", RangeColor1 = "#EFC820", RangeColor2 = "#CA4218";
+
+    public GetCurrentValue ColorValue { get; set; }
+    public class GetCurrentValue
+    {
+        public string hex { get; set; }
+    }
+    public void StartColor(ColorPickerEventArgs args)
+    {
+        this.ColorValue = ((JObject)args.CurrentValue).ToObject<GetCurrentValue>();
+        this.RangeColor0 = this.ColorValue.hex;
+    }
+
+    public void MiddleColor(ColorPickerEventArgs args)
+    {
+        this.ColorValue = ((JObject)args.CurrentValue).ToObject<GetCurrentValue>();
+        this.RangeColor1 = this.ColorValue.hex;
+    }
+
+    public void EndColor(ColorPickerEventArgs args)
+    {
+        this.ColorValue = ((JObject)args.CurrentValue).ToObject<GetCurrentValue>();
+        this.RangeColor2 = this.ColorValue.hex;
+    }
+
+    public class ChartData
+    {
+        public double value { get; set; }
+        public double target { get; set; }
+    }
+    public List<ChartData> BulletChartData = new List<ChartData>
+{
+        new ChartData { value = 1.7, target = 2.5 }
+    };
+
+    string CurrentUri;
+    void BeforeRender(IBulletLoadedEventArgs Args)
+    {
+        CurrentUri = NavigationManager.Uri;
+        if (CurrentUri.IndexOf("material") > -1)
+        {
+            Args.Theme = ChartTheme.Material;
+        }
+        else if (CurrentUri.IndexOf("fabric") > -1)
+        {
+            Args.Theme = ChartTheme.Fabric;
+        }
+        else if (CurrentUri.IndexOf("bootstrap") > -1)
+        {
+            Args.Theme = ChartTheme.Bootstrap;
+        }
+        else if (CurrentUri.IndexOf("highcontrast") > -1)
+        {
+            Args.Theme = ChartTheme.HighContrast;
+        }
+        else
+        {
+            Args.Theme = ChartTheme.Bootstrap4;
+        }
+    }
+}

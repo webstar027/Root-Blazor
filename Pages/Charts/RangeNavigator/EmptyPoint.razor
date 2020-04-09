@@ -1,0 +1,238 @@
+﻿@page "/range-selector/empty-point"
+@using Syncfusion.Blazor.Charts
+@using Newtonsoft.Json
+@inject NavigationManager NavigationManager
+@inherits SampleBaseComponent;
+@if (EmptyData == null)
+{
+    <div class="stockchartloader"></div>
+}
+else
+{
+    <div class="control-section" align="center">
+        <h4 style="font-family: Segoe UI;font-weight: 500; font-style:normal; font-size:15px;">AAPL 2012-17</h4>
+        <div>
+            <SfRangeNavigator Value="@Value" LabelPosition="AxisPosition.Outside" ValueType="Syncfusion.Blazor.Charts.RangeValueType.DateTime">
+                <RangeNavigatorEvents Load="BeforeRender" Changed="onRangeChanged"></RangeNavigatorEvents>
+                <RangeNavigatorMajorGridLines Width="0"></RangeNavigatorMajorGridLines>
+                <RangeNavigatorMajorTickLines Width="0"></RangeNavigatorMajorTickLines>
+                <RangeNavigatorBorder Width="0"></RangeNavigatorBorder>
+                <RangeNavigatorRangeTooltipSettings Enable="true" DisplayMode="TooltipDisplayMode.Always"></RangeNavigatorRangeTooltipSettings>
+                <RangeNavigatorSeriesCollection>
+                    <RangeNavigatorSeries Fill="@FillColor" DataSource="@EmptyData" Width="2" XName="x" Type="RangeNavigatorType.Area" YName="open">
+                    </RangeNavigatorSeries>
+                </RangeNavigatorSeriesCollection>
+            </SfRangeNavigator>
+        </div>
+        <div>
+            <SfChart>
+                <ChartEvents Load="ChartLoad" />
+                <ChartArea><ChartAreaBorder Width="0" Color="transparent"></ChartAreaBorder></ChartArea>
+                <ChartPrimaryXAxis ValueType="Syncfusion.Blazor.Charts.ValueType.DateTime" EdgeLabelPlacement="EdgeLabelPlacement.Shift" ZoomFactor="@ZF" ZoomPosition="@ZP">
+                    <ChartAxisMajorGridLines Width="0"></ChartAxisMajorGridLines>
+                    <ChartAxisCrosshairTooltip Enable="true"></ChartAxisCrosshairTooltip>
+                </ChartPrimaryXAxis>
+                <ChartPrimaryYAxis RangePadding="ChartRangePadding.Normal">
+                    <ChartAxisMajorTickLines Width="0"></ChartAxisMajorTickLines>
+                    <ChartAxisLineStyle Width="0"></ChartAxisLineStyle>
+                </ChartPrimaryYAxis>
+                <ChartSeriesCollection>
+                    <ChartSeries Fill="@FillColor" DataSource="@EmptyData" XName="x" YName="open" Name="Sales" Width="2" Type="ChartSeriesType.Area">
+                    </ChartSeries>
+                </ChartSeriesCollection>
+                <ChartTooltipSettings Enable="true" Shared="true"></ChartTooltipSettings>
+                <ChartLegendSettings Visible="false"></ChartLegendSettings>
+            </SfChart>
+        </div>
+    </div>
+}
+@code{
+    double ZF = 1;
+    double ZP = 0;
+    private ChartData[] EmptyData;
+    string FillColor;
+    string valueUrl = "url";
+    protected override async Task OnInitializedAsync()
+    {
+        await Task.Run(() =>
+        {
+            EmptyData = JsonConvert.DeserializeObject<ChartData[]>(System.IO.File.ReadAllText("./wwwroot/scripts/range-navigator/chartdata.json"));
+            int max = 250;
+            for (int i = 0; i <= max; i++)
+            {
+                if (i > 45 && 50 > i)
+                {
+                    EmptyData[i].open = null;
+                }
+                else if (i > 95 && 100 > i)
+                {
+                    EmptyData[i].open = null;
+                }
+                else if (i > 145 && 150 > i)
+                {
+                    EmptyData[i].open = null;
+                }
+                else if (i > 195 && 200 > i)
+                {
+                    EmptyData[i].open = null;
+                }
+                else if (i > 245 && 250 > i)
+                {
+                    EmptyData[i].open = null;
+                }
+            }
+        });
+
+        CurrentUri = NavigationManager.Uri;
+        if (CurrentUri.IndexOf("material") > -1)
+        {
+
+            FillColor = String.Concat(valueUrl, "(#material-gradient-chart)");
+        }
+        else if (CurrentUri.IndexOf("fabric") > -1)
+        {
+            FillColor = String.Concat(valueUrl, "(#fabric-gradient-chart)");
+        }
+        else if (CurrentUri.IndexOf("bootstrap4") > -1)
+        {
+            FillColor = String.Concat(valueUrl, "(#bootstrap4-gradient-chart)");
+        }
+        else if (CurrentUri.IndexOf("bootstrap") > -1)
+        {
+            FillColor = String.Concat(valueUrl, "(#bootstrap-gradient-chart)");
+        }
+        else if (CurrentUri.IndexOf("highcontrast") > -1)
+        {
+            FillColor = String.Concat(valueUrl, "(#highcontrast-gradient-chart)");
+        }
+        else
+        {
+            FillColor = String.Concat(valueUrl, "(#bootstrap4-gradient-chart)");
+        }
+    }
+    public class ChartData
+    {
+        public DateTime x;
+        public Nullable<Double> open;
+    }
+    private DateTime[] Value = new DateTime[] { new DateTime(2013, 12, 27), new DateTime(2015, 03, 23) };
+    public void onRangeChanged(IChangedEventArgs args)
+    {
+        ZF = args.ZoomFactor;
+        ZP = args.ZoomPosition;
+        StateHasChanged();
+    }
+
+    string CurrentUri;
+    void BeforeRender(IRangeLoadedEventArgs Args)
+    {
+        CurrentUri = NavigationManager.Uri;
+        if (CurrentUri.IndexOf("material") > -1)
+        {
+            Args.Theme = ChartTheme.Material;
+        }
+        else if (CurrentUri.IndexOf("fabric") > -1)
+        {
+            Args.Theme = ChartTheme.Fabric;
+        }
+        else if (CurrentUri.IndexOf("bootstrap") > -1)
+        {
+            Args.Theme = ChartTheme.Bootstrap;
+        }
+        else if (CurrentUri.IndexOf("highcontrast") > -1)
+        {
+            Args.Theme = ChartTheme.HighContrast;
+        }
+        else
+        {
+            Args.Theme = ChartTheme.Bootstrap4;
+        }
+    }
+
+    void ChartLoad(ILoadedEventArgs Args)
+    {
+        CurrentUri = NavigationManager.Uri;
+        if (CurrentUri.IndexOf("material") > -1)
+        {
+            Args.Theme = ChartTheme.Material;
+        }
+        else if (CurrentUri.IndexOf("fabric") > -1)
+        {
+            Args.Theme = ChartTheme.Fabric;
+        }
+        else if (CurrentUri.IndexOf("bootstrap4") > -1)
+        {
+            Args.Theme = ChartTheme.Bootstrap4;
+        }
+        else if (CurrentUri.IndexOf("bootstrap") > -1)
+        {
+            Args.Theme = ChartTheme.Bootstrap;
+        }
+        else if (CurrentUri.IndexOf("highcontrast") > -1)
+        {
+            Args.Theme = ChartTheme.HighContrast;
+        }
+        else
+        {
+            Args.Theme = ChartTheme.Bootstrap4;
+        }
+    }
+}
+<style>
+    #control-container {
+        padding: 0px !important;
+    }
+
+    #material-gradient-chart stop {
+        stop-color: #00bdae;
+    }
+
+    #fabric-gradient-chart stop {
+        stop-color: #4472c4;
+    }
+
+    #bootstrap-gradient-chart stop {
+        stop-color: #a16ee5;
+    }
+
+    #bootstrap4-gradient-chart stop {
+        stop-color: #a16ee5;
+    }
+
+    #highcontrast-gradient-chart stop {
+        stop-color: #79ECE4;
+    }
+
+    .chart-gradient stop[offset="0"] {
+        stop-opacity: 0.9;
+    }
+
+    .chart-gradient stop[offset="1"] {
+        stop-opacity: 0.3;
+    }
+</style>
+<svg style="height: 0">
+    <defs>
+        <linearGradient id="material-gradient-chart" style="opacity: 0.75" class="chart-gradient" x1="0" x2="0" y1="0" y2="1">
+            <stop offset="0"></stop>
+            <stop offset="1"></stop>
+        </linearGradient>
+        <linearGradient id="fabric-gradient-chart" style="opacity: 0.75" class="chart-gradient" x1="0" x2="0" y1="0" y2="1">
+            <stop offset="0"></stop>
+            <stop offset="1"></stop>
+        </linearGradient>
+        <linearGradient id="bootstrap-gradient-chart" style="opacity: 0.75" class="chart-gradient" x1="0" x2="0" y1="0" y2="1">
+            <stop offset="0"></stop>
+            <stop offset="1"></stop>
+        </linearGradient>
+        <linearGradient id="bootstrap4-gradient-chart" style="opacity: 0.75" class="chart-gradient" x1="0" x2="0" y1="0" y2="1">
+            <stop offset="0"></stop>
+            <stop offset="1"></stop>
+        </linearGradient>
+        <linearGradient id="highcontrast-gradient-chart" style="opacity: 0.75" class="chart-gradient" x1="0" x2="0" y1="0" y2="1">
+            <stop offset="0"></stop>
+            <stop offset="1"></stop>
+        </linearGradient>
+    </defs>
+</svg>
+

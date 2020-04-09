@@ -1,0 +1,147 @@
+﻿@page "/smith-chart/print-and-export"
+@using Syncfusion.Blazor.Charts;
+@using Syncfusion.Blazor.Buttons;
+@using Syncfusion.Blazor.DropDowns;
+@using Syncfusion.Blazor.Inputs;
+
+@inherits SampleBaseComponent;
+
+<div class="col-lg-9 control-section sb-property-border">
+        <SfSmithchart @ref="@smithChart">
+            <SmithchartHorizontalAxis>
+                <SmithchartHorizontalMinorGridLines Visible="true"></SmithchartHorizontalMinorGridLines>
+            </SmithchartHorizontalAxis>
+            <SmithchartRadialAxis>
+                <SmithchartRadialMinorGridLines Visible="true"></SmithchartRadialMinorGridLines>
+            </SmithchartRadialAxis>
+            <SmithchartSeriesCollection>
+                <SmithchartSeries Name="Transmission" EnableAnimation="true" Points="@SmithchartSeries">
+                    <SmithchartSeriesTooltip Visible="true"></SmithchartSeriesTooltip>
+                    <SmithchartSeriesMarker Shape="Circle" Visible="true">
+                        <SmithchartSeriesMarkerBorder Width="2"></SmithchartSeriesMarkerBorder>
+                    </SmithchartSeriesMarker>
+                </SmithchartSeries>
+                <SmithchartLegendSettings Visible="true" Shape="Circle"></SmithchartLegendSettings>
+            </SmithchartSeriesCollection>
+        </SfSmithchart>
+    </div>
+<div class="col-lg-3 property-section">
+    <div class="property-panel-section">
+        <div class="property-panel-header">Properties</div>
+        <div class="property-panel-content">
+            <table style="width: 120%">
+                <tbody>
+                    <tr style="height: 50px">
+                        <td style="width: 40%">
+                            <div class="property-text">Export Type</div>
+                        </td>
+                        <td style="width: 60%;">
+                            <div style="margin-left: -10px">
+                                <SfDropDownList TValue="string" TItem="Typelist" DataSource="@FileTypes" Value="@fileType" Width="65%">
+                                    <DropDownListEvents TValue="string" ValueChange="SmithValueChange"></DropDownListEvents>
+                                    <DropDownListFieldSettings Text="Name" Value="Name"></DropDownListFieldSettings>
+                                </SfDropDownList>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr style="height: 50px">
+                        <td style="width: 40%">
+                            <div class="property-text">File Name</div>
+                        </td>
+                        <td style="width: 60%;">
+                            <div class="e-float-input" style="margin-top: 0px;  margin-left: -10px;width:70%">
+                                <SfTextBox Value="@fileName" ValueChange="@NameChange" Placeholder="Smith chart"></SfTextBox>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr style="height: 50px">
+                        <td style="width: 50%;padding-left: 7%;">
+                            <SfButton  OnClick="ExportClick" CssClass="e-info" IsToggle="true" IsPrimary="true">Export</SfButton>
+                        </td>
+                        <td style="width: 50%;">
+                            <SfButton  OnClick="PrintClick" CssClass="e-info" IsToggle="true" IsPrimary="true">Print</SfButton>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@code {
+    SfSmithchart smithChart;
+    private String fileType { get; set; } = "JPEG";
+    private String fileName { get; set; } = "Smith chart";
+
+    public class SmithDataSource
+    {
+        public Double resistance;
+        public Double reactance;
+    };
+    private List<SmithDataSource> SmithchartSeries = new List<SmithDataSource> {
+    new SmithDataSource { resistance= 0.15, reactance= 0.01 },
+    new SmithDataSource { resistance= 0.15, reactance= 0.15 },
+    new SmithDataSource { resistance= 0.18, reactance= 0.3 },
+    new SmithDataSource { resistance= 0.2, reactance= 0.4 },
+    new SmithDataSource { resistance= 0.25, reactance= 0.6 },
+    new SmithDataSource { resistance= 0.38, reactance= 0.95 },
+    new SmithDataSource { resistance= 0.6, reactance= 1.25 },
+    new SmithDataSource { resistance= 1, reactance= 1.6 },
+    new SmithDataSource { resistance= 1.65, reactance= 1.9 },
+    new SmithDataSource { resistance= 2.75, reactance= 2 },
+    new SmithDataSource { resistance= 4.5, reactance= 0.01 },
+    new SmithDataSource { resistance= 3, reactance= -2 },
+    new SmithDataSource { resistance= 1.65, reactance= -1.95 },
+    new SmithDataSource { resistance= 1, reactance= -1.65 },
+    new SmithDataSource { resistance= 0.6, reactance= -1.25 },
+    new SmithDataSource { resistance= 0.35, reactance= -0.9 },
+    new SmithDataSource { resistance= 0.25, reactance= -0.6 },
+    new SmithDataSource { resistance= 0.25, reactance= -0.4 },
+    new SmithDataSource { resistance= 0.25, reactance= -0.3 },
+    new SmithDataSource { resistance= 0.25, reactance= -0.15 },
+    new SmithDataSource { resistance= 0.25, reactance= 0.01 },
+};
+
+    public class Typelist
+    {
+        public String Name { get; set; }
+    }
+    private List<Typelist> FileTypes = new List<Typelist> {
+        new Typelist { Name="JPEG" },
+        new Typelist { Name="PNG" },
+        new Typelist { Name="SVG" },
+        new Typelist { Name="PDF" }
+    };
+    private void SmithValueChange(Syncfusion.Blazor.DropDowns.ChangeEventArgs<string> args)
+    {
+        fileType = args.Value;
+    }
+    private void NameChange(Syncfusion.Blazor.Inputs.ChangedEventArgs args)
+    {
+        fileName = args.Value;
+    }
+    private void ExportClick(MouseEventArgs args)
+    {
+        SmithchartExportType exportFileType = SmithchartExportType.JPEG;
+        switch (fileType)
+        {
+            case "JPEG":
+                exportFileType = SmithchartExportType.JPEG;
+                break;
+            case "PNG":
+                exportFileType = SmithchartExportType.PNG;
+                break;
+            case "SVG":
+                exportFileType = SmithchartExportType.SVG;
+                break;
+            case "PDF":
+                exportFileType = SmithchartExportType.PDF;
+                break;
+        }
+        this.smithChart.Export(exportFileType, fileName);
+    }
+    private void PrintClick(MouseEventArgs args)
+    {
+        this.smithChart.Print();
+    }
+}

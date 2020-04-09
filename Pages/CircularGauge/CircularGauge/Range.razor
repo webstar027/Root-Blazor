@@ -1,0 +1,292 @@
+﻿@page "/circular-gauge/range"
+
+@using Syncfusion.Blazor.CircularGauge
+@using Syncfusion.Blazor.DropDowns
+@using Syncfusion.Blazor.Buttons
+
+@inherits SampleBaseComponent;
+<div class="col-lg-9 control-section sb-property-border">
+        <SfCircularGauge>
+            <CircularGaugeAxes>
+                <CircularGaugeAxis StartAngle="210" EndAngle="150" Minimum="0" Maximum="120" Radius="80%">
+                    <CircularGaugeAxisLineStyle Width="10" Color="transparent">
+                    </CircularGaugeAxisLineStyle>
+                    <CircularGaugeAxisLabelStyle UseRangeColor="@EnableRangeColor">
+                        <CircularGaugeAxisLabelFont Size="12px" FontFamily="Roboto" FontStyle="Regular">
+                        </CircularGaugeAxisLabelFont>
+                    </CircularGaugeAxisLabelStyle>
+                    <CircularGaugeAxisMajorTicks Height="10" Offset="5" UseRangeColor="@EnableRangeColor">
+                    </CircularGaugeAxisMajorTicks>
+                    <CircularGaugeAxisMinorTicks Height="0" Width="0" UseRangeColor="@EnableRangeColor">
+                    </CircularGaugeAxisMinorTicks>
+                    <CircularGaugeAnnotations>
+                        <CircularGaugeAnnotation Radius="30%" Angle="0" ZIndex="1" >
+                            <ContentTemplate>
+                                <div><span style="font-size:14px; color:#9E9E9E; font-family:Regular; margin-left: -33px">Speedometer</span></div>
+                            </ContentTemplate>
+                        </CircularGaugeAnnotation>
+                        <CircularGaugeAnnotation Radius="40%" Angle="180" ZIndex="1">
+                            <ContentTemplate>
+                                <div><span style="font-size:20px; color:#424242; font-family:Regular; margin-left: -33px">65 MPH</span></div>
+                            </ContentTemplate>
+                        </CircularGaugeAnnotation>
+                    </CircularGaugeAnnotations>
+                    <CircularGaugeRanges>
+                        <CircularGaugeRange Start="@LowRangeStart" End="@LowRangeEnd" Color="@lowRangeColor" StartWidth="@LowRangeStartWidth" EndWidth="@LowRangeEndWidth" RoundedCornerRadius="@lowRangeCornerRadius">
+                        </CircularGaugeRange>
+                        <CircularGaugeRange Start="@MediumRangeStart" End="@MediumRangeEnd" Color="@mediumRangeColor" StartWidth="@MediumRangeStartWidth" EndWidth="@MediumRangeEndWidth" RoundedCornerRadius="@mediumRangeCornerRadius">
+                        </CircularGaugeRange>
+                        <CircularGaugeRange Start="@HighRangeStart" End="@HighRangeEnd" Color="@highRangeColor" StartWidth="@HighRangeStartWidth" EndWidth="@HighRangeEndWidth" RoundedCornerRadius="@highRangeCornerRadius">
+                        </CircularGaugeRange>
+                    </CircularGaugeRanges>
+                    <CircularGaugePointers>
+                        <CircularGaugePointer Value="65" Radius="60%" PointerWidth="8">
+                            <CircularGaugePointerAnimation Enable="@GaugeAnimation"></CircularGaugePointerAnimation>
+                            <CircularGaugeCap Radius="7">
+                            </CircularGaugeCap>
+                            <CircularGaugeNeedleTail Length="18%">
+                            </CircularGaugeNeedleTail>
+                        </CircularGaugePointer>
+                    </CircularGaugePointers>
+                </CircularGaugeAxis>
+            </CircularGaugeAxes>
+        </SfCircularGauge>
+    </div>
+<div class="col-md-3 property-section">
+    <div class="property-panel-section">
+        <div class="property-panel-header">Properties</div>
+        <div class="property-panel-content">
+            <table title="Properties" style="width: 100%">
+                <tr style="height: 50px">
+                    <td>
+                        <div style="padding-left:10px"> Select Range </div>
+                    </td>
+                    <td>
+                        <div style="padding-left:10px">
+                            <SfDropDownList DataSource="@rangeData" Value="@rangeValue">
+                                <DropDownListEvents ValueChange="RangeChange" TValue="string"></DropDownListEvents>
+                                <DropDownListFieldSettings Text="Name" Value="Name"></DropDownListFieldSettings>
+                            </SfDropDownList>
+                        </div>
+                    </td>
+                </tr>
+                <tr style="height: 50px">
+                    <td>
+                        <div style="padding-left:10px">Range Start <span> &nbsp;&nbsp;&nbsp;@rangeStartText</span> </div>
+                    </td>
+                    <td>
+                        <div style="padding-left:10px">
+                            <input type="range" value="@rangeStartValue" min="0" max="120" @onchange="RangeStartChange" />
+                        </div>
+                    </td>
+                </tr>
+
+                <tr style="height: 50px">
+                    <td>
+                        <div style="padding-left:10px">Range End <span> &nbsp;&nbsp;&nbsp;@rangeEndText</span> </div>
+                    </td>
+                    <td>
+                        <div style="padding-left:10px">
+                            <input type="range" value="@rangeEndValue" min="0" max="120" @onchange="RangeEndChange" />
+                        </div>
+                    </td>
+                </tr>
+                <tr style="height: 50px">
+                    <td>
+                        <div style="padding-left:10px">Range Color</div>
+                    </td>
+                    <td>
+                        <div style="padding-left:10px">
+                            <SfDropDownList DataSource="@rangeColorData" Value="@rangeColorValue">
+                                <DropDownListEvents ValueChange="RangeColorChange" TValue="string"></DropDownListEvents>
+                                <DropDownListFieldSettings Text="Name" Value="Name"></DropDownListFieldSettings>
+                            </SfDropDownList>
+                        </div>
+                    </td>
+                </tr>
+                <tr style="height: 50px">
+                    <td style="width: 20%">
+                        <div style="padding-left:10px">Range Font Color</div>
+                    </td>
+                    <td style="width: 40%;">
+                        <div style="padding-left:10px">
+                            <SfCheckBox ValueChange="@RangeFontChange" Checked="@rangeFontChecked"></SfCheckBox>
+                        </div>
+                    </td>
+                </tr>
+                <tr style="height: 50px">
+                    <td>
+                        <div style="padding-left:10px">Start Width <span> &nbsp;&nbsp;&nbsp;@startWidthText</span> </div>
+                    </td>
+                    <td>
+                        <div style="padding-left:10px">
+                            <input type="range" value="@rangeStartWidthValue" min="0" max="30" @onchange="StartWidthChange" />
+                        </div>
+                    </td>
+                </tr>
+                <tr style="height: 50px">
+                    <td>
+                        <div style="padding-left:10px">End Width <span> &nbsp;&nbsp;&nbsp;@endWidthText</span> </div>
+                    </td>
+                    <td>
+                        <div style="padding-left:10px">
+                            <input type="range" value="@rangeEndWidthValue" min="0" max="30" @onchange="EndWidthChange" />
+                        </div>
+                    </td>
+                </tr>
+                <tr style="height: 50px">
+                    <td>
+                        <div style="padding-left:10px">Corner Radius <span> &nbsp;&nbsp;&nbsp;@cornerRadiusText</span> </div>
+                    </td>
+                    <td>
+                        <div style="padding-left:10px">
+                            <input type="range" value="@rangeCornerRadiusValue" min="0" max="30" @onchange="CornerRadiusChange" />
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+
+<style>
+    td {
+        width: 40%;
+    }
+</style>
+
+@code {
+    private Double LowRangeStart = 0;
+    private Double LowRangeEnd = 40;
+    private String lowRangeColor = "#30B32D";
+    private String LowRangeStartWidth = "10";
+    private String LowRangeEndWidth = "10";
+    private Double lowRangeCornerRadius = 0;
+    private Double MediumRangeStart = 40;
+    private Double MediumRangeEnd = 80;
+    private String mediumRangeColor = "#FFDD00";
+    private String MediumRangeStartWidth = "10";
+    private String MediumRangeEndWidth = "10";
+    private Double mediumRangeCornerRadius = 0;
+    private Double HighRangeStart = 80;
+    private Double HighRangeEnd = 120;
+    private String highRangeColor = "#F03E3E";
+    private String HighRangeStartWidth = "10";
+    private String HighRangeEndWidth = "10";
+    private Double highRangeCornerRadius = 0;
+    private Boolean EnableRangeColor;
+    private String rangeValue = "Low";
+    private Double rangeStartValue = 0;
+    private Double rangeEndValue = 40;
+    private String rangeColorValue = "#30B32D";
+    private Boolean rangeFontChecked;
+    private String rangeStartWidthValue = "10";
+    private String rangeEndWidthValue = "10";
+    private Double rangeCornerRadiusValue = 0;
+    private Double rangeStartText = 0;
+    private Double rangeEndText = 40;
+    private String startWidthText = "10";
+    private String endWidthText = "10";
+    private Double cornerRadiusText = 0;
+    private Boolean GaugeAnimation = true;
+    public class Range1 { public string Name { get; set; } }
+    private List<Range1> rangeData = new List<Range1> {
+        new Range1{ Name = "Low"},
+        new Range1{ Name = "Medium"},
+        new Range1{ Name = "High"},
+    };
+    public class RangeColor
+    {
+        public string Name { get; set; }
+    }
+    private List<RangeColor> rangeColorData = new List<RangeColor> {
+        new RangeColor{ Name = "#30B32D"},
+        new RangeColor{ Name = "#FFDD00"},
+        new RangeColor{ Name = "#F03E3E"},
+    };
+    private void RangeChange(Syncfusion.Blazor.DropDowns.ChangeEventArgs<string> args)
+    {
+        rangeValue = (args.Value).ToString();
+        if (rangeValue == "Low")
+        {
+            rangeStartValue = rangeStartText = LowRangeStart;
+            rangeEndValue = rangeEndText = LowRangeEnd;
+            rangeStartWidthValue = startWidthText = LowRangeStartWidth;
+            rangeEndWidthValue = endWidthText = LowRangeEndWidth;
+            rangeCornerRadiusValue = cornerRadiusText = lowRangeCornerRadius;
+            rangeColorValue = lowRangeColor;
+        }
+        else if (rangeValue == "Medium")
+        {
+            rangeStartValue = rangeStartText = MediumRangeStart;
+            rangeEndValue = rangeEndText = MediumRangeEnd;
+            rangeStartWidthValue = startWidthText = MediumRangeStartWidth;
+            rangeEndWidthValue = endWidthText = MediumRangeEndWidth;
+            rangeCornerRadiusValue = cornerRadiusText = mediumRangeCornerRadius;
+        }
+        else
+        {
+            rangeStartValue = rangeStartText = HighRangeStart;
+            rangeEndValue = rangeEndText = HighRangeEnd;
+            rangeStartWidthValue = startWidthText = HighRangeStartWidth;
+            rangeEndWidthValue = endWidthText = HighRangeEndWidth;
+            rangeCornerRadiusValue = cornerRadiusText = highRangeCornerRadius;
+        }
+        GaugeAnimation = false;
+    }
+    private void RangeColorChange(Syncfusion.Blazor.DropDowns.ChangeEventArgs<string> args)
+    {
+        rangeColorValue = (args.Value).ToString();
+        if (rangeValue == "Low") { lowRangeColor = rangeColorValue; }
+        else if (rangeValue == "Medium") { mediumRangeColor = rangeColorValue; }
+        else { highRangeColor = rangeColorValue; }
+        GaugeAnimation = false;
+    }
+    private void RangeStartChange(Microsoft.AspNetCore.Components.ChangeEventArgs args)
+    {
+        rangeStartValue = Convert.ToDouble(args.Value);
+        if (rangeValue == "Low") { 
+            LowRangeStart = rangeStartValue; 
+        }
+        else if (rangeValue == "Medium") { MediumRangeStart = rangeStartValue; }
+        else { HighRangeStart = rangeStartValue; }
+        rangeStartText = rangeStartValue;
+    }
+    private void RangeEndChange(Microsoft.AspNetCore.Components.ChangeEventArgs args)
+    {
+        rangeEndValue = Convert.ToDouble(args.Value);
+        if (rangeValue == "Low") { LowRangeEnd = rangeEndValue; }
+        else if (rangeValue == "Medium") { MediumRangeEnd = rangeEndValue; }
+        else { HighRangeEnd = rangeEndValue; }
+        rangeEndText = rangeEndValue;
+    }
+    private void StartWidthChange(Microsoft.AspNetCore.Components.ChangeEventArgs args)
+    {
+        rangeStartWidthValue = (args.Value).ToString();
+        if (rangeValue == "Low") { LowRangeStartWidth = rangeStartWidthValue; }
+        else if (rangeValue == "Medium") { MediumRangeStartWidth = rangeStartWidthValue; }
+        else { HighRangeStartWidth = rangeStartWidthValue; }
+        startWidthText = rangeStartWidthValue;
+    }
+    private void EndWidthChange(Microsoft.AspNetCore.Components.ChangeEventArgs args)
+    {
+        rangeEndWidthValue = (args.Value).ToString();
+        if (rangeValue == "Low") { LowRangeEndWidth = rangeEndWidthValue; }
+        else if (rangeValue == "Medium") { MediumRangeEndWidth = rangeEndWidthValue; }
+        else { HighRangeEndWidth = rangeEndWidthValue; }
+        endWidthText = rangeEndWidthValue;
+    }
+    private void CornerRadiusChange(Microsoft.AspNetCore.Components.ChangeEventArgs args)
+    {
+        rangeCornerRadiusValue = Convert.ToDouble(args.Value);
+        if (rangeValue == "Low") { lowRangeCornerRadius = rangeCornerRadiusValue; }
+        else if (rangeValue == "Medium") { mediumRangeCornerRadius = rangeCornerRadiusValue; }
+        else { highRangeCornerRadius = rangeCornerRadiusValue; }
+        cornerRadiusText = rangeCornerRadiusValue;
+    }
+    private void RangeFontChange(Syncfusion.Blazor.Buttons.ChangeEventArgs args)
+    {
+        rangeFontChecked = args.Checked;
+        EnableRangeColor = rangeFontChecked;
+    }
+}

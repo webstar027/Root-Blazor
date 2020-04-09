@@ -1,0 +1,67 @@
+﻿@page "/MultiSelect-Dropdown/Data-Binding"
+
+@using Syncfusion.Blazor.DropDowns
+@using Syncfusion.Blazor.Data
+
+@inherits SampleBaseComponent;
+
+<div class="control-section col-lg-12">
+    <div id="local-data" class="col-lg-6">
+        <div class="content">
+            <h4>Local Data</h4>
+            <SfMultiSelect TValue="string[]" Placeholder="Select countries" DataSource="@country">
+                <MultiSelectFieldSettings Text="Name" Value="Code"></MultiSelectFieldSettings>
+            </SfMultiSelect>
+        </div>
+    </div>
+    <div id="remote-data" class="col-lg-6">
+        <div class="content">
+            <h4>Remote Data</h4>
+            <SfMultiSelect TValue="int?[]" Placeholder="Select a name" Query="@RemoteQuery">
+                <SfDataManager Url="https://ej2services.syncfusion.com/production/web-services/api/Employees" Adaptor="@Syncfusion.Blazor.Adaptors.WebApiAdaptor" CrossDomain=true></SfDataManager>
+                <MultiSelectFieldSettings Text="FirstName" Value="EmployeeID"></MultiSelectFieldSettings>
+            </SfMultiSelect>
+        </div>
+    </div>
+</div>
+
+@code{
+    public class Countries
+    {
+        public string Name { get; set; }
+
+        public string Code { get; set; }
+    }
+
+    private List<Countries> country = new List<Countries>
+{
+        new Countries() { Name = "Australia", Code = "AU" },
+        new Countries() { Name = "Bermuda", Code = "BM" },
+        new Countries() { Name = "Canada", Code = "CA" },
+        new Countries() { Name = "Cameroon", Code = "CM" },
+        new Countries() { Name = "Denmark", Code = "DK" },
+        new Countries() { Name = "France", Code = "FR" },
+        new Countries() { Name = "Finland", Code = "FI" },
+        new Countries() { Name = "Germany", Code = "DE" },
+        new Countries() { Name = "Greenland", Code = "GL" },
+        new Countries() { Name = "Hong Kong", Code = "HK" },
+        new Countries() { Name = "India", Code = "IN" },
+        new Countries() { Name = "Italy", Code = "IT" },
+        new Countries() { Name = "Japan", Code = "JP" },
+        new Countries() { Name = "Mexico", Code = "MX" },
+        new Countries() { Name = "Norway", Code = "NO" },
+        new Countries() { Name = "Poland", Code = "PL" },
+        new Countries() { Name = "Switzerland", Code = "CH" },
+        new Countries() { Name = "United Kingdom", Code = "GB" },
+        new Countries() { Name = "United States", Code = "US" },
+    };
+
+    public string RemoteQuery = "new sf.data.Query()";
+
+}
+
+<style>
+    #local-data, #remote-data {
+        padding-top: 50px;
+    }
+</style>

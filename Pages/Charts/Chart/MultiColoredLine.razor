@@ -1,0 +1,90 @@
+﻿@page "/chart/multi-colored-line"
+@using Syncfusion.Blazor.Charts
+@using Newtonsoft.Json
+@inject NavigationManager NavigationManager
+@inherits SampleBaseComponent;
+
+<div class="control-section">
+    <div align="center">
+        <SfChart Title="Particulate Levels in Rainfall" Width="80%">
+            <ChartEvents Load="ChartLoad"/>
+            <ChartArea>
+                <ChartAreaBorder Width="0"></ChartAreaBorder>
+            </ChartArea>
+            <ChartPrimaryXAxis ValueType="Syncfusion.Blazor.Charts.ValueType.DateTime" IntervalType="IntervalType.Years" EdgeLabelPlacement="EdgeLabelPlacement.Shift">
+                <ChartAxisMajorGridLines Width="0"></ChartAxisMajorGridLines>
+            </ChartPrimaryXAxis>
+            <ChartPrimaryYAxis RangePadding="ChartRangePadding.None" Title="Particulate Matter(PM)" Minimum="4" Maximum="10">
+                <ChartAxisLineStyle Width="0"></ChartAxisLineStyle>
+                <ChartAxisMajorTickLines Width="0"></ChartAxisMajorTickLines>
+            </ChartPrimaryYAxis>
+            <ChartLegendSettings Visible="false"></ChartLegendSettings>
+            <ChartTooltipSettings Enable="true" Shared="true"></ChartTooltipSettings>
+            <ChartSeriesCollection>
+                <ChartSeries DataSource="@chartData" Name="Rainfall" XName="XValue" YName="YValue" PointColorMapping="Color" Width="1.5" Type="ChartSeriesType.MultiColoredLine">
+                </ChartSeries>
+            </ChartSeriesCollection>
+        </SfChart>
+    </div>
+</div>
+
+@code{
+
+    string[] color = {"red", "green", "#ff0097", "crimson", "blue", "darkorange", "deepskyblue",
+                             "mediumvioletred", "violet", "peru", "gray", "deeppink", "navy" };
+    List<LineChartData> chartData = new List<LineChartData>();
+    public class LineChartData
+    {
+        public DateTime XValue { get; set; }
+        public double YValue { get; set; }
+        public string Color { get; set; }
+    }
+    int value;
+    private Double[] ChartData = new Double[150];
+    protected override async Task OnInitializedAsync()
+    {
+        await Task.Run(() =>
+        {
+            ChartData = JsonConvert.DeserializeObject<Double[]>(System.IO.File.ReadAllText("./wwwroot/scripts/chart/rainfall-data.js"));
+
+            for (double i = 0; i < ChartData.Length; i++)
+            {
+                this.value = (int)i;
+                chartData.Add(new LineChartData
+                {
+                    XValue = new DateTime(2004, 1, 1).AddMonths(this.value),
+
+                    YValue = ChartData[this.value],
+                    Color = color[(this.value / 16)]
+                });
+            }
+        });
+    }
+
+    string CurrentUri;
+
+    void ChartLoad(ILoadedEventArgs Args)
+    {
+        CurrentUri = NavigationManager.Uri;
+        if (CurrentUri.IndexOf("material") > -1)
+        {
+            Args.Theme = ChartTheme.Material;
+        }
+        else if (CurrentUri.IndexOf("fabric") > -1)
+        {
+            Args.Theme = ChartTheme.Fabric;
+        }
+        else if (CurrentUri.IndexOf("bootstrap") > -1)
+        {
+            Args.Theme = ChartTheme.Bootstrap;
+        }
+        else if (CurrentUri.IndexOf("highcontrast") > -1)
+        {
+            Args.Theme = ChartTheme.HighContrast;
+        }
+        else
+        {
+            Args.Theme = ChartTheme.Bootstrap4;
+        }
+    }
+}

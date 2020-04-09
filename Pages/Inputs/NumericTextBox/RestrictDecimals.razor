@@ -1,0 +1,41 @@
+﻿@page "/Numeric-TextBox/Restrict-Decimals"
+
+@using Syncfusion.Blazor.Inputs
+
+@inherits SampleBaseComponent;
+
+<div class="control-section">
+    <div class="col-lg-12 control-section">
+        <div class="content-wrapper">
+            <div class="control-label">
+                Numeric Textbox
+            </div>
+            <SfNumericTextBox TValue="double?" ValidateDecimalOnType="true" Value=10 Format="n3" Decimals=3 Min=0></SfNumericTextBox>
+            <div class="control-label">
+                Percentage Textbox
+            </div>
+            <SfNumericTextBox TValue="double?" Format="p3" ValidateDecimalOnType="true" Decimals=3 Value=0.5 Max=1 Min=0 Step=0.01></SfNumericTextBox>
+            <div class="control-label">
+                Currency TextBox
+            </div>
+            <SfNumericTextBox TValue="double?" ValidateDecimalOnType="true" Format="c3" Decimals=3 Value=100></SfNumericTextBox>
+        </div>
+    </div>
+</div>
+
+<style>
+    .content-wrapper {
+        width: 35%;
+        margin: 0 auto;
+        min-width: 185px;
+    }
+
+    .control-label {
+        padding: 24px 0px 10px 0px;
+        font-size: 12px;
+    }
+
+    .e-float-input.e-numeric.e-input-group {
+        margin-top: 40px;
+    }
+</style>

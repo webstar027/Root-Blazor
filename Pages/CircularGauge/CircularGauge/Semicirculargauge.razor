@@ -1,0 +1,173 @@
+﻿@page "/circular-gauge/semi-circular-gauge"
+
+@using Syncfusion.Blazor.CircularGauge
+@using Syncfusion.Blazor.Buttons
+
+@inherits SampleBaseComponent;
+
+<div class="col-lg-9 control-section sb-property-border">
+        <SfCircularGauge CenterX="@gaugeCenterx" CenterY="@gaugeCentery" MoveToCenter="@gaugeMoveToCenter">
+            <CircularGaugeAxes>
+                <CircularGaugeAxis HideIntersectingLabel="@HideLabelCheck" StartAngle="@gaugeStartAngle" EndAngle="@gaugeEndAngle" Minimum="0" Maximum="100" Radius="@gaugeRadius">
+                    <CircularGaugeAxisLineStyle Width="0.01" Color="#0450C2">
+                    </CircularGaugeAxisLineStyle>
+                    <CircularGaugeAxisLabelStyle Position="Syncfusion.Blazor.CircularGauge.Position.Outside" AutoAngle=true>
+                        <CircularGaugeAxisLabelFont FontWeight="Normal">
+                        </CircularGaugeAxisLabelFont>
+                    </CircularGaugeAxisLabelStyle>
+                    <CircularGaugeAxisMajorTicks Position="Syncfusion.Blazor.CircularGauge.Position.Inside" Width="2" Height="12" Interval="4">
+                    </CircularGaugeAxisMajorTicks>
+                    <CircularGaugeAxisMinorTicks Position="Syncfusion.Blazor.CircularGauge.Position.Inside" Height="5" Width="1" Interval="2">
+                    </CircularGaugeAxisMinorTicks>
+                    <CircularGaugePointers>
+                        <CircularGaugePointer Value="30" Radius="75%" Color="#FF9200" PointerWidth="7">
+                            <CircularGaugePointerAnimation Enable=false>
+                            </CircularGaugePointerAnimation>
+                            <CircularGaugeCap Radius="8" Color="#565656">
+                                <CircularGaugeCapBorder Width="0">
+                                </CircularGaugeCapBorder>
+                            </CircularGaugeCap>
+                            <CircularGaugeNeedleTail Length="13%" Color="#FF9200">
+                            </CircularGaugeNeedleTail>
+                        </CircularGaugePointer>
+                    </CircularGaugePointers>
+                </CircularGaugeAxis>
+            </CircularGaugeAxes>
+        </SfCircularGauge>
+    </div>
+<div class="col-md-3 property-section">
+    <div class="property-panel-section">
+        <div class="property-panel-header">Properties</div>
+        <div class="property-panel-content">
+            <table title="Properties" style="width: 100%">
+                <tr style="height: 50px">
+                    <td>
+                        <div>Start Angle <span> &nbsp;&nbsp;&nbsp;@gaugeStartAngle°</span> </div>
+                    </td>
+                    <td>
+                        <div>
+                            <input type="range" value="@gaugeStartAngle" min="0" max="360" @onchange="StartSlider" />
+                        </div>
+                    </td>
+                </tr>
+                <tr style="height: 50px">
+                    <td>
+                        <div>End Angle<span> &nbsp;&nbsp;&nbsp;@gaugeEndAngle°</span> </div>
+                    </td>
+                    <td>
+                        <div>
+                            <input type="range" value="@gaugeEndAngle" min="0" max="360" @onchange="EndSlider" />
+                        </div>
+                    </td>
+                </tr>
+                <tr style="height: 50px">
+                    <td>
+                        <div>Radius <span> &nbsp;&nbsp;&nbsp;@sliderRadius%</span> </div>
+                    </td>
+                    <td>
+                        <div>
+                            <input type="range" value="@sliderRadius" min="30" max="100" @onchange="RadiusSlider" />
+                        </div>
+                    </td>
+                </tr>
+                <tr style="height: 50px">
+                    <td>
+                        <div class="property-text">Radius based on angle</div>
+                    </td>
+                    <td style="width: 40%;">
+                        <div>
+                            <SfCheckBox ValueChange="@RadiusAngleCheckbox" Checked="@gaugeMoveToCenter"></SfCheckBox>
+                        </div>
+                    </td>
+                </tr>
+                <tr style="height: 50px">
+                    <td>
+                        <div>Center X <span> &nbsp;&nbsp;&nbsp;@sliderCenterx%</span> </div>
+                    </td>
+                    <td>
+                        <div>
+                            <input disabled="@centerSliderEnable" type="range" value="@sliderCenterx" min="0" max="100" @onchange="CenterxSlider" />
+                        </div>
+                    </td>
+                </tr>
+                <tr style="height: 50px">
+                    <td>
+                        <div>Center Y <span> &nbsp;&nbsp;&nbsp;@sliderCentery%</span> </div>
+                    </td>
+                    <td>
+                        <div>
+                            <input disabled="@centerSliderEnable" type="range" value="@sliderCentery" min="0" max="100" @onchange="CenterySlider" />
+                        </div>
+                    </td>
+                </tr>
+                <tr style="height: 50px">
+                    <td>
+                        <div class="property-text">Hide intersecting label</div>
+                    </td>
+                    <td style="width: 40%;">
+                        <div>
+                            <SfCheckBox ValueChange="@LabelCheck" Checked="@intersectLabelChecked"></SfCheckBox>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+
+@code{
+    private Double gaugeStartAngle = 270;
+    private Double gaugeEndAngle = 90;
+    private string gaugeRadius = "80%";
+    private double sliderRadius = 80;
+    private String gaugeCenterx = "50%";
+    private String gaugeCentery = "50%";
+    private double sliderCenterx = 50;
+    private double sliderCentery = 50;
+    private Boolean gaugeMoveToCenter = false;
+    private Boolean intersectLabelChecked = true;
+    private Boolean HideLabelCheck = true;
+    private Boolean centerSliderEnable = false;
+    private void RadiusAngleCheckbox(Syncfusion.Blazor.Buttons.ChangeEventArgs args)
+    {
+        gaugeMoveToCenter = args.Checked;
+        if (gaugeMoveToCenter)
+        {
+            gaugeCenterx = gaugeCentery = null;
+        }
+        else
+        {
+            gaugeCenterx = sliderCenterx.ToString() + "%";
+            gaugeCentery = sliderCentery.ToString() + "%";
+        }
+        centerSliderEnable = gaugeMoveToCenter;
+    }
+    private void LabelCheck(Syncfusion.Blazor.Buttons.ChangeEventArgs args)
+    {
+        intersectLabelChecked = args.Checked;
+        HideLabelCheck = intersectLabelChecked;
+    }
+    private void StartSlider(Microsoft.AspNetCore.Components.ChangeEventArgs args)
+    {
+        gaugeStartAngle = Convert.ToDouble(args.Value);
+    }
+    private void EndSlider(Microsoft.AspNetCore.Components.ChangeEventArgs args)
+    {
+        gaugeEndAngle = Convert.ToDouble(args.Value);
+    }
+    private void RadiusSlider(Microsoft.AspNetCore.Components.ChangeEventArgs args)
+    {
+        gaugeRadius = (args.Value.ToString() + "%");
+        sliderRadius = Convert.ToDouble(args.Value);
+    }
+    private void CenterxSlider(Microsoft.AspNetCore.Components.ChangeEventArgs args)
+    {
+        gaugeCenterx = (args.Value.ToString() + "%");
+        sliderCenterx = Convert.ToDouble(args.Value);
+    }
+    private void CenterySlider(Microsoft.AspNetCore.Components.ChangeEventArgs args)
+    {
+        gaugeCentery = (args.Value.ToString() + "%");
+        sliderCentery = Convert.ToDouble(args.Value);
+    }
+}

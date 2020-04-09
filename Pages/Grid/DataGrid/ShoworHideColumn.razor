@@ -1,0 +1,72 @@
+﻿@page "/datagrid/show-or-hide-column"
+
+@using Syncfusion.Blazor.Grids
+@using Syncfusion.Blazor.Buttons
+@using blazor_griddata
+
+@inherits SampleBaseComponent;
+
+<div class="col-lg-12 control-section">
+    <div class="content-wrapper">
+        <div class="row">
+            <div class="e-mastertext">Click the switch to toggle visibility</div>
+            <div>
+                <label class="showhide" style="padding: 10px 5px 10px 0"> Order ID </label>
+                <SfSwitch ValueChange="@((Syncfusion.Blazor.Buttons.ChangeEventArgs args) => { change("Order ID", args); })" @bind-Checked="@Check"></SfSwitch>
+                <label class="showhide" style="padding: 10px 5px 10px 40px"> Customer Name </label>
+                <SfSwitch ValueChange="@((Syncfusion.Blazor.Buttons.ChangeEventArgs args) => { change("Customer Name", args); })" @bind-Checked="@Check1"></SfSwitch>
+                <label class="showhide" style="padding: 10px 5px 10px 40px"> Freight </label>
+                <SfSwitch ValueChange="@((Syncfusion.Blazor.Buttons.ChangeEventArgs args) => { change("Freight", args); })" @bind-Checked="@Check2"></SfSwitch>
+            </div>
+
+            <SfGrid DataSource="@GridData" @ref="Grid" AllowPaging="true">
+                <GridPageSettings PageCount="5"></GridPageSettings>
+                <GridColumns>
+                    <GridColumn Field=@nameof(OrdersDetails.OrderID) HeaderText="Order ID" TextAlign="TextAlign.Right" Width="120"></GridColumn>
+                    <GridColumn Field=@nameof(OrdersDetails.CustomerID) HeaderText="Customer Name" Visible="true" Width="150"></GridColumn>
+                    <GridColumn Field=@nameof(OrdersDetails.OrderDate) HeaderText="Order Date" Format="d" Type="ColumnType.Date" TextAlign="TextAlign.Right" Width="130"></GridColumn>
+                    <GridColumn Field=@nameof(OrdersDetails.Freight) HeaderText="Freight" Format="C2" Visible="true" TextAlign="TextAlign.Right" Width="120"></GridColumn>
+                </GridColumns>
+            </SfGrid>
+
+        </div>
+    </div>
+</div>
+
+<style>
+    .showhide {
+        font-size: 15px;
+        font-weight: 200;
+    }
+
+    .e-mastertext {
+        font-size: 15px;
+        font-family: Roboto;
+        opacity: 0.87;
+        padding: 1em;
+    }
+</style>
+
+@code{
+    SfGrid<OrdersDetails> Grid;
+
+    Boolean Check =  true, Check1 = true, Check2 = true;
+
+    public List<OrdersDetails> GridData { get; set; }
+
+    protected override void OnInitialized()
+    {
+        GridData = OrdersDetails.GetAllRecords();
+    }
+
+    public void change(string name, Syncfusion.Blazor.Buttons.ChangeEventArgs args)
+    {
+        if (args.Checked)
+        {
+            this.Grid.ShowColumns(name);
+        }
+        else {
+            this.Grid.HideColumns(name);
+        }
+    }
+}

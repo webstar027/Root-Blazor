@@ -1,0 +1,75 @@
+﻿@page "/chart/stacked-bar"
+@using Syncfusion.Blazor.Charts
+@inject NavigationManager NavigationManager
+@inherits SampleBaseComponent;
+
+<div class="control-section">
+    <SfChart Title="Sales Comparison">
+     <ChartEvents Load="ChartLoad"/>
+        <ChartArea><ChartAreaBorder Width="0"></ChartAreaBorder></ChartArea>
+        <ChartPrimaryXAxis ValueType="Syncfusion.Blazor.Charts.ValueType.Category">
+            <ChartAxisMajorGridLines Width="0"></ChartAxisMajorGridLines>
+        </ChartPrimaryXAxis>
+        <ChartPrimaryYAxis  LabelFormat="{value}%" EdgeLabelPlacement="EdgeLabelPlacement.Shift">
+            <ChartAxisLineStyle Width="0"></ChartAxisLineStyle>
+            <ChartAxisMajorTickLines Width="0"></ChartAxisMajorTickLines>
+        </ChartPrimaryYAxis>
+        <ChartSeriesCollection>
+            <ChartSeries DataSource="@DataSource" XName="x" YName="y" Width="2" Name="Apple" Type="ChartSeriesType.StackingBar">
+            </ChartSeries>
+            <ChartSeries DataSource="@DataSource" XName="x" YName="y1" Width="2" Name="Orange" Type="ChartSeriesType.StackingBar">
+            </ChartSeries>
+            <ChartSeries DataSource="@DataSource" XName="x" YName="y2" Width="2" Name="Wastage" Type="ChartSeriesType.StackingBar">
+            </ChartSeries>
+        </ChartSeriesCollection>
+        <ChartTooltipSettings Enable="true"></ChartTooltipSettings>
+    </SfChart>
+</div>
+
+@code{
+    public class StackedBarChartData
+    {
+        public string x { get; set; }
+        public double y { get; set; }
+        public double y1 { get; set; }
+        public double y2 { get; set; }
+    }
+    public List<StackedBarChartData> DataSource = new List<StackedBarChartData>
+    {
+        new StackedBarChartData { x= "Jan", y= 6   , y1= 6 , y2= -1  },
+        new StackedBarChartData { x= "Feb", y= 8   , y1= 8 , y2= -1.5},
+        new StackedBarChartData { x= "Mar", y= 12  , y1= 11, y2= -2  },
+        new StackedBarChartData { x= "Apr", y= 15.5, y1= 16, y2= -2.5},
+        new StackedBarChartData { x= "May", y= 20  , y1= 21, y2= -3  },
+        new StackedBarChartData { x= "Jun", y= 24  , y1= 25, y2= -3.5}
+    };
+string CurrentUri;
+    void ChartLoad(ILoadedEventArgs Args)
+    {
+        CurrentUri = NavigationManager.Uri;
+        if (CurrentUri.IndexOf("material") > -1)
+        {
+            Args.Theme = ChartTheme.Material;
+        }
+        else if (CurrentUri.IndexOf("fabric") > -1)
+        {
+            Args.Theme = ChartTheme.Fabric;
+        }
+        else if (CurrentUri.IndexOf("bootstrap4") > -1)
+        {
+            Args.Theme = ChartTheme.Bootstrap4;
+        }
+        else if (CurrentUri.IndexOf("bootstrap") > -1)
+        {
+            Args.Theme = ChartTheme.Bootstrap;
+        }
+        else if (CurrentUri.IndexOf("highcontrast") > -1)
+        {
+            Args.Theme = ChartTheme.HighContrast;
+        }
+        else
+        {
+            Args.Theme = ChartTheme.Bootstrap4;
+        }
+    }
+}

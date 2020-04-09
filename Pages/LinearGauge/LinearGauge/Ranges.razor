@@ -1,0 +1,265 @@
+﻿@page "/linear-gauge/ranges"
+
+@using Syncfusion.Blazor.LinearGauge
+@using Syncfusion.Blazor.DropDowns
+@using Syncfusion.Blazor.Inputs
+
+@inherits SampleBaseComponent;
+
+<div class="col-lg-9 control-section sb-property-border">
+    <div class="control-section">
+        <SfLinearGauge @ref="@linear" Orientation="Orientation.Horizontal" Width="100%">
+            <LinearGaugeAxes>
+                <LinearGaugeAxis Minimum="0" Maximum="100">
+                    <LinearGaugeLine Width="0"></LinearGaugeLine>
+                    <LinearGaugeAxisLabelStyle Offset="30" Format="{value}%" UseRangeColor="@EnableRangeColor">
+                    </LinearGaugeAxisLabelStyle>
+                    <LinearGaugeMajorTicks Interval="10" Height="0">
+                    </LinearGaugeMajorTicks>
+                    <LinearGaugeMinorTicks Height="0">
+                    </LinearGaugeMinorTicks>
+                    <LinearGaugePointers>
+                        <LinearGaugePointer Value="35" Height="10" Width="10" Placement="Syncfusion.Blazor.LinearGauge.Placement.Near" Offset="-40" MarkerType="MarkerType.Triangle">
+                        </LinearGaugePointer>
+                    </LinearGaugePointers>
+                    <LinearGaugeRanges>
+                        <LinearGaugeRange Start="@FirstRangeStart" End="@FirstRangeEnd" Color="@FirstRangeColor" StartWidth="@FirstRangeStartWidth" EndWidth="@FirstRangeEndWidth"></LinearGaugeRange>
+                        <LinearGaugeRange Start="@SecondRangeStart" End="@SecondRangeEnd" Color="@SecondRangeColor" StartWidth="@SecondRangeStartWidth" EndWidth="@SecondRangeEndWidth"></LinearGaugeRange>
+                        <LinearGaugeRange Start="@ThirdRangeStart" End="@ThirdRangeEnd" Color="@ThirdRangeColor" StartWidth="@ThirdRangeStartWidth" EndWidth="@ThirdRangeEndWidth"></LinearGaugeRange>
+                    </LinearGaugeRanges>
+                </LinearGaugeAxis>
+            </LinearGaugeAxes>
+            <LinearGaugeAnnotations>
+                <LinearGaugeAnnotation AxisIndex="0" AxisValue="35" Y="-50" ZIndex="1">
+                    <ContentTemplate>
+                        <div style="width:40px"><h1 style="font-size:18px; margin-top: -5px; margin-left: -10px">@annotationText</h1></div>
+                    </ContentTemplate>
+                </LinearGaugeAnnotation>
+            </LinearGaugeAnnotations>
+        </SfLinearGauge>
+    </div>
+</div>
+<div class="col-md-3 property-section">
+    <div class="property-panel-section">
+        <div class="property-panel-header">Properties</div>
+        <div class="property-panel-content">
+            <table style="width: 100%">
+                <tr>
+                    <td style="width:50%">
+                        <div style="padding-left: 10px; padding-top: 10px;"> Select Range</div>
+                    </td>
+                    <td style="width:40%">
+                        <div style="padding-left: 10px; padding-top: 10px;">
+                            <SfDropDownList TItem="RangeData" TValue="string" DataSource="@RangDataList" Value="@rangeValue">
+                                <DropDownListEvents TValue="string" ValueChange="RangeChange"></DropDownListEvents>
+                                <DropDownListFieldSettings text="Name" value="Name"></DropDownListFieldSettings>
+                            </SfDropDownList>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width:50%">
+                        <div style="padding-left: 10px; padding-top: 10px;">Range Color</div>
+                    </td>
+                    <td style="width:40%">
+                        <div class="e-float-input" style="margin-top: 0px; padding-left: 10px; padding-top: 10px;">
+                            <SfTextBox Value="@rangeColorValue" ValueChange="@RangeColorValueChange"></SfTextBox>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width:50%">
+                        <div style="padding-left: 10px; padding-top: 10px;">Range Font Color</div>
+                    </td>
+                    <td style="width:40%">
+                        <div style="padding-left: 10px; padding-top: 10px;">
+                            <SfDropDownList TValue="string" TItem="FontColorData" DataSource="@FontColorTypeList" Value="@fontColorValue">
+                                <DropDownListEvents TValue="string" ValueChange="RangeFontColorChange"></DropDownListEvents>
+                                <DropDownListFieldSettings text="Name" value="Value"></DropDownListFieldSettings>
+                            </SfDropDownList>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width:50%">
+                        <div style="padding-left: 10px; padding-top: 10px;">
+                            Range Start
+                            <span>&nbsp;&nbsp;&nbsp;@rangeStartText</span>
+                        </div>
+                    </td>
+                    <td style="width:40%">
+                        <div style="padding-left: 10px; padding-top: 10px;">
+                            <input type="range" value="@rangeStartValue" min="0" max="100" @onchange="RangeStartChange" />
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width:50%">
+                        <div style="padding-left: 10px; padding-top: 10px;">
+                            Range End
+                            <span>&nbsp;&nbsp;&nbsp;@rangeEndText</span>
+                        </div>
+                    </td>
+                    <td style="width:40%">
+                        <div style="padding-left: 10px; padding-top: 10px;">
+                            <input type="range" value="@rangeEndValue" min="0" max="100" @onchange="RangeEndChange" />
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width:50%">
+                        <div style="padding-left: 10px; padding-top: 10px;">
+                            Range Start Width
+                            <span>&nbsp;&nbsp;&nbsp;@rangeStartWidthText</span>
+                        </div>
+                    </td>
+                    <td style="width:40%">
+                        <div style="padding-left: 10px; padding-top: 10px;">
+                            <input type="range" value="@rangeStartWidth" min="0" max="30" @onchange="RangeStartwidthChange" />
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width:50%">
+                        <div style="padding-left: 10px; padding-top: 10px;">
+                            Range End Width
+                            <span>&nbsp;&nbsp;&nbsp;@rangeEndWidthText</span>
+                        </div>
+                    </td>
+                    <td style="width:40%">
+                        <div style="padding-left: 10px; padding-top: 10px;">
+                            <input type="range" value="@rangeEndWidth" min="0" max="30" @onchange="RangeEndWidthChange" />
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+
+<style>
+    .padding-table div {
+        padding-left: 10px;
+        padding-top: 10px;
+    }
+</style>
+@code {
+    private Double FirstRangeStart = 0.1;
+    private Double FirstRangeEnd = 32;
+    private Double FirstRangeStartWidth = 15;
+    private Double FirstRangeEndWidth = 15;
+    private String FirstRangeColor = "#30B32D";
+    private Double SecondRangeStart = 32;
+    private Double SecondRangeEnd = 68;
+    private Double SecondRangeStartWidth = 15;
+    private Double SecondRangeEndWidth = 15;
+    private String SecondRangeColor = "#FFDF00";
+    private Double ThirdRangeStart = 68;
+    private Double ThirdRangeEnd = 100;
+    private Double ThirdRangeStartWidth = 15;
+    private Double ThirdRangeEndWidth = 15;
+    private String ThirdRangeColor = "#F03E3E";
+    private Boolean EnableRangeColor = false;
+    private String rangeValue = "Low";
+    private String fontColorValue = "default";
+    private Double rangeStartValue = 0;
+    private Double rangeEndValue = 32;
+    private Double rangeStartWidth = 15;
+    private Double rangeEndWidth = 15;
+    private String rangeColorValue = "#F03E3E";
+    private Double rangeStartText = 0;
+    private Double rangeEndText = 32;
+    private Double rangeStartWidthText = 15;
+    private Double rangeEndWidthText = 15;
+    public String annotationText = (35).ToString();
+    SfLinearGauge linear;
+    public class RangeData
+    {
+        public String Name { get; set; }
+    }
+    private List<RangeData> RangDataList = new List<RangeData>
+{
+    new RangeData{  Name = "Low"},
+    new RangeData{ Name = "Moderate"},
+    new RangeData{  Name = "High"},
+    };
+    public class FontColorData
+    {
+        public String Name { get; set; }
+        public String Value { get; set; }
+    }
+    private List<FontColorData> FontColorTypeList = new List<FontColorData>
+{
+    new FontColorData{ Value = "default" , Name = "Default Color"},
+    new FontColorData{ Value = "range" , Name = "Range Color"},
+    };
+    private void RangeChange(Syncfusion.Blazor.DropDowns.ChangeEventArgs<string> args)
+    {
+        rangeValue = (args.Value).ToString();
+        if (rangeValue == "Low")
+        {
+            rangeColorValue = FirstRangeColor;
+            rangeStartValue = rangeStartText = FirstRangeStart;
+            rangeEndValue = rangeEndText = FirstRangeEnd;
+            rangeStartWidth = rangeStartWidthText = FirstRangeStartWidth;
+            rangeEndWidth = rangeEndWidthText = FirstRangeEndWidth;
+        }
+        else if (rangeValue == "Moderate")
+        {
+            rangeColorValue = SecondRangeColor;
+            rangeStartValue = rangeStartText = SecondRangeStart;
+            rangeEndValue = rangeEndText = SecondRangeEnd;
+            rangeStartWidth = rangeStartWidthText = SecondRangeStartWidth;
+            rangeEndWidth = rangeEndWidthText = SecondRangeEndWidth;
+        }
+        else
+        {
+            rangeColorValue = ThirdRangeColor;
+            rangeStartValue = rangeStartText = ThirdRangeStart;
+            rangeEndValue = rangeEndText = ThirdRangeEnd;
+            rangeStartWidth = rangeStartWidthText = ThirdRangeStartWidth;
+            rangeEndWidth = rangeEndWidthText = ThirdRangeEndWidth;
+        }
+    }
+    private void RangeColorValueChange(Syncfusion.Blazor.Inputs.ChangedEventArgs args)
+    {
+        rangeColorValue = (args.Value).ToString();
+        if (rangeValue == "Low") { FirstRangeColor = rangeColorValue; }
+        else if (rangeValue == "Moderate") { SecondRangeColor = rangeColorValue; }
+        else { ThirdRangeColor = rangeColorValue; }
+    }
+    private void RangeFontColorChange(Syncfusion.Blazor.DropDowns.ChangeEventArgs<string> args)
+    {
+        fontColorValue = (args.Value).ToString();
+        if (fontColorValue == "default") { EnableRangeColor = false; }
+        else { EnableRangeColor = true; }
+    }
+    private void RangeStartChange(Microsoft.AspNetCore.Components.ChangeEventArgs args)
+    {
+        rangeStartValue = rangeStartText = Convert.ToDouble(args.Value);
+        if (rangeValue == "Low") { FirstRangeStart = rangeStartValue; }
+        else if (rangeValue == "Moderate") { SecondRangeStart = rangeStartValue; }
+        else { ThirdRangeStart = rangeStartValue; }
+    }
+    private void RangeEndChange(Microsoft.AspNetCore.Components.ChangeEventArgs args)
+    {
+        rangeEndValue = rangeEndText = Convert.ToDouble(args.Value);
+        if (rangeValue == "Low") { FirstRangeEnd = rangeEndValue; }
+        else if (rangeValue == "Moderate") { SecondRangeEnd = rangeEndValue; }
+        else { ThirdRangeEnd = rangeEndValue; }
+    }
+    private void RangeStartwidthChange(Microsoft.AspNetCore.Components.ChangeEventArgs args)
+    {
+        rangeStartWidth = rangeStartWidthText = Convert.ToDouble(args.Value);
+        if (rangeValue == "Low") { FirstRangeStartWidth = rangeStartWidth; }
+        else if (rangeValue == "Moderate") { SecondRangeStartWidth = rangeStartWidth; }
+        else { ThirdRangeStartWidth = rangeStartWidth; }
+    }
+    private void RangeEndWidthChange(Microsoft.AspNetCore.Components.ChangeEventArgs args)
+    {
+        rangeEndWidth = rangeEndWidthText = Convert.ToDouble(args.Value);
+        if (rangeValue == "Low") { FirstRangeEndWidth = rangeEndWidth; }
+        else if (rangeValue == "Moderate") { SecondRangeEndWidth = rangeEndWidth; }
+        else { ThirdRangeEndWidth = rangeEndWidth; }
+    }
+}

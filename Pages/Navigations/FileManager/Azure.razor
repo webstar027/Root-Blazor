@@ -1,0 +1,17 @@
+﻿@page "/file-manager/azure"
+
+@using Syncfusion.Blazor.FileManager;
+
+@inject IJSRuntime JsRuntime;
+
+@inherits SampleBaseComponent;
+
+<div class="control-section">
+    <SfFileManager>
+        <FileManagerAjaxSettings Url="https://ej2-azure-aspcore-service.azurewebsites.net/api/AzureFileManager/AzureFileoperations"
+                                 UploadUrl="https://ej2-azure-aspcore-service.azurewebsites.net/api/AzureFileManager/AzureUpload"
+                                 DownloadUrl="https://ej2-azure-aspcore-service.azurewebsites.net/api/AzureFileManager/AzureDownload"
+                                 GetImageUrl="https://ej2-azure-aspcore-service.azurewebsites.net/api/AzureFileManager/AzureGetImage">
+        </FileManagerAjaxSettings>
+    </SfFileManager>
+</div>

@@ -1,0 +1,32 @@
+﻿@page "/rich-text-editor/markdown-custom-format"
+
+@using Syncfusion.Blazor
+@using Syncfusion.Blazor.RichTextEditor
+
+@inherits SampleBaseComponent;
+
+<div class="control-section">
+    <SfRichTextEditor Height="250px" Formatter="@Customformat" EditorMode="EditorMode.Markdown">
+        <ChildContent>
+            The sample is configured with customized markdown syntax using the __formatter__ property. Type the content and click the toolbar item to view customized markdown syntax. For unordered list, you need to add a plus sign before the word (e.g., + list1). Or To make a phrase bold, you need to add two underscores before and after the phrase (e.g., __this text is bold__).
+            <RichTextEditorToolbarSettings Items="@Tools"></RichTextEditorToolbarSettings>
+        </ChildContent>
+    </SfRichTextEditor>
+</div>
+
+@code{
+
+public object[] Tools = new object[]{
+        "Bold", "Italic", "StrikeThrough", "|",
+        "Formats", "OrderedList", "UnorderedList", "|",
+        "CreateLink", "Image", "CreateTable", "|", "Undo", "Redo"
+    };
+
+public string Customformat = @"new sf.richtexteditor.MarkdownFormatter({
+    listTags: { 'OL': '2. ', 'UL': '+ ' },
+    formatTags: {
+        'Blockquote': '> '
+    },
+    selectionTags: { 'Bold': ' __ ', 'Italic': '_' }
+})";
+}

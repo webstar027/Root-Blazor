@@ -1,0 +1,42 @@
+﻿@page "/tree-grid/dialog-editing"
+
+@using Syncfusion.Blazor.TreeGrid
+
+@*Hidden:Lines*@
+@using ej2_blazor_selfdata
+@inherits SampleBaseComponent;
+@*End:Lines*@
+
+
+<div class="col-lg-12 control-section">
+    <div class="content-wrapper">
+        <div class="row">
+            <SfTreeGrid DataSource="@TreeData" IdMapping="TaskID" ParentIdMapping="ParentID" TreeColumnIndex="1" AllowPaging="true" Toolbar="@(new List<string>() { "Add", "Edit", "Delete", "Update", "Cancel" })" Height="400">
+                <TreeGridPageSettings PageSize="2"></TreeGridPageSettings>
+                <TreeGridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true" Mode="EditMode.Dialog"></TreeGridEditSettings>
+                <TreeGridColumns>
+                    <TreeGridColumn Field="TaskID" HeaderText="Task ID" ValidationRules="@(new { required=true, number=true})"  IsPrimaryKey="true" Width="80" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Right"></TreeGridColumn>
+                    <TreeGridColumn Field="TaskName" HeaderText="Task Name" ValidationRules="@(new { required=true})" Width="165"></TreeGridColumn>
+                    <TreeGridColumn Field="StartDate" HeaderText="Start Date" ValidationRules="@(new { date=true})" Format="d" Type=Syncfusion.Blazor.Grids.ColumnType.Date Width="100" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Right" EditType=Syncfusion.Blazor.Grids.EditType.DatePickerEdit></TreeGridColumn>
+                    <TreeGridColumn Field="Duration" HeaderText="Duration" ValidationRules="@(new { number=true, min=0})" Width="100" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Right" EditType="Syncfusion.Blazor.Grids.EditType.NumericEdit" Edit="@(new { @params = new { format = "n"} })"></TreeGridColumn>
+                    <TreeGridColumn Field="Progress" HeaderText="Progress" ValidationRules="@(new {minLength=3})" Width="100"></TreeGridColumn>
+                    <TreeGridColumn Field="Priority" HeaderText="Priority" Width="100"></TreeGridColumn>
+
+                </TreeGridColumns>
+            </SfTreeGrid>
+        </div>
+    </div>
+</div>
+
+@code{
+
+    public List<SelfReferenceData> TreeData { get; set; }
+
+   
+
+    protected override void OnInitialized()
+    {
+            
+            this.TreeData = SelfReferenceData.GetTree().ToList();
+    }
+}

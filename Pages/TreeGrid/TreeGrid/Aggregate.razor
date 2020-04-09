@@ -1,0 +1,64 @@
+﻿@page "/tree-grid/aggregate"
+
+@using Syncfusion.Blazor.TreeGrid
+@using Syncfusion.Blazor.Grids
+@using Syncfusion.Blazor.Data
+@*Hidden:Lines*@
+@inherits SampleBaseComponent;
+@using ej2_blazor_summarydata
+@*End:Hidden*@
+
+
+
+
+<div class="col-lg-12 control-section">
+    <div class="content-wrapper">
+        <div class="row">
+            <SfTreeGrid DataSource="@TreeData" IdMapping="ID" ParentIdMapping="ParentID" Height="315" TreeColumnIndex="1">
+                <TreeGridAggregates>
+                    <TreeGridAggregate>
+                        <TreeGridAggregateColumns>
+                            <TreeGridAggregateColumn Field="UnitWeight" Type="Syncfusion.Blazor.Grids.AggregateType.Max">
+                                <FooterTemplate>
+                                    @{
+                                        var Maxvalue = (context as Syncfusion.Blazor.TreeGrid.AggregateTemplateContext);
+                                        <div>
+                                            <p>Maximum: @Maxvalue.Max</p>
+                                        </div>
+                                    }
+                                </FooterTemplate>
+                            </TreeGridAggregateColumn>
+                            <TreeGridAggregateColumn Field="TotalUnits" Type="Syncfusion.Blazor.Grids.AggregateType.Min">
+                                <FooterTemplate>
+                                    @{
+                                        var Minvalue = (context as Syncfusion.Blazor.TreeGrid.AggregateTemplateContext);
+                                        <div>
+                                            <p>Minimum: @Minvalue.Min</p>
+                                        </div>
+                                    }
+                                </FooterTemplate>
+                            </TreeGridAggregateColumn>
+                        </TreeGridAggregateColumns>
+                    </TreeGridAggregate>
+                </TreeGridAggregates>
+                <TreeGridColumns>
+                    <TreeGridColumn Field="FreightID" HeaderText="Freight ID" Width="130" TextAlign="TextAlign.Left"></TreeGridColumn>
+                    <TreeGridColumn Field="FreightName" HeaderText="Freight Name" Width="220" TextAlign="TextAlign.Left" ></TreeGridColumn>
+                    <TreeGridColumn Field="TotalCosts" HeaderText="Total Costs" Width="100" TextAlign="TextAlign.Right"></TreeGridColumn>
+                    <TreeGridColumn Field="UnitWeight" HeaderText="Weight Per Unit" Width="140" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Right"></TreeGridColumn>
+                    <TreeGridColumn Field="TotalUnits" HeaderText="Total Units" Width="140" TextAlign="TextAlign.Right"></TreeGridColumn>
+                </TreeGridColumns>
+            </SfTreeGrid>
+        </div>
+    </div>
+</div>
+
+@code{
+
+    public List<SummaryRowData> TreeData { get; set; }
+
+    protected override void OnInitialized()
+    {
+        this.TreeData = SummaryRowData.GetSummaryData().Take(12).ToList();
+    }
+}

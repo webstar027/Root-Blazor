@@ -1,0 +1,212 @@
+﻿@page "/chart/smart-axis-labels"
+@using Syncfusion.Blazor.Charts
+@using Syncfusion.Blazor.Buttons
+@using Syncfusion.Blazor.Inputs
+@using Syncfusion.Blazor.DropDowns
+@inject NavigationManager NavigationManager
+@inherits SampleBaseComponent;
+<div>
+    <div class="col-md-8 control-section">
+        <SfChart Title="Internet Users in Millons">
+         <ChartEvents Load="ChartLoad"/>
+            <ChartArea><ChartAreaBorder Width="0"></ChartAreaBorder></ChartArea>
+            <ChartPrimaryXAxis EdgeLabelPlacement="@LabelPlacement" LabelPosition="@LabelPosition" MaximumLabelWidth="@LabelWidth" EnableTrim="@EnableTrim" ValueType="Syncfusion.Blazor.Charts.ValueType.Category" Interval="1" LabelIntersectAction="@IntersectAction">
+                <ChartAxisMajorGridLines Width="0"></ChartAxisMajorGridLines>
+            </ChartPrimaryXAxis>
+            <ChartPrimaryYAxis>
+                <ChartAxisLineStyle Width="0"></ChartAxisLineStyle>
+                <ChartAxisMajorTickLines Width="0"></ChartAxisMajorTickLines>
+                <ChartAxisMajorGridLines Width="0"></ChartAxisMajorGridLines>
+                <ChartAxisLabelStyle Size="0px"></ChartAxisLabelStyle>
+            </ChartPrimaryYAxis>
+            <ChartTooltipSettings Enable="true"></ChartTooltipSettings>
+            <ChartSeriesCollection>
+                <ChartSeries DataSource="@ChartData" XName="x" YName="y" Name="Users" Opacity="1" Width="2" Type="ChartSeriesType.Column">
+                    <ChartMarker>
+                        <ChartDataLabel Visible="true" Position="Syncfusion.Blazor.Charts.LabelPosition.Top">
+                            <ChartDataLabelFont Color="#ffffff" FontWeight="600"></ChartDataLabelFont>
+                        </ChartDataLabel>
+                    </ChartMarker>
+                </ChartSeries>
+            </ChartSeriesCollection>
+            <ChartLegendSettings Visible="false"></ChartLegendSettings>
+        </SfChart>
+    </div>
+    <div class="col-md-4 property-section">
+        <table  title="Properties" style="width: 100%">
+            <tr style="height:50px"><th>Properties</th></tr>
+            <tr style="height: 50px">
+                <td style="width: 40%">
+                    <div>Intersect Action:</div>
+                </td>
+                <td style="width: 60%;">
+                    <SfDropDownList TValue="string" TItem="SelectionTypes" @bind-Value="@DropVal" DataSource="@InterSectAction">
+                        <DropDownListEvents TValue="string" ValueChange="ChangeIntersectAction"></DropDownListEvents>
+                        <DropDownListFieldSettings Value="Type"></DropDownListFieldSettings>
+                    </SfDropDownList>
+                </td>
+            </tr>
+            <tr style="height: 50px">
+                <td style="width: 60%">
+                    <div>Edge Label Placement:</div>
+                </td>
+                <td style="width: 40%;">                   
+                        <SfDropDownList TValue="string" TItem="SelectionTypes" @bind-Value="@DropVal2" DataSource="@EdgePlacement">
+                        <DropDownListEvents TValue="string" ValueChange="ChangeLabelPlacement"></DropDownListEvents>
+                        <DropDownListFieldSettings Value="Type"></DropDownListFieldSettings>
+                    </SfDropDownList>                    
+                </td>
+            </tr>
+            <tr style="height: 50px">
+                <td style="width: 60%">
+                    <div>Label Position:</div>
+                </td>
+                <td style="width: 40%;">
+                    <SfDropDownList TValue="string" TItem="SelectionTypes" @bind-Value="@DropVal3" DataSource="@PositionLabel">
+                        <DropDownListEvents TValue="string" ValueChange="ChangeLabelPosition"></DropDownListEvents>
+                        <DropDownListFieldSettings Value="Type"></DropDownListFieldSettings>
+                    </SfDropDownList>
+                </td>
+            </tr>
+            <tr style="height: 50px">
+                <td style="width: 60%">
+                    <div>Enable Trim:</div>
+                </td>
+                <td style="width: 40%;">
+                    <div>
+                        <SfCheckBox Checked="@IsTrim" ValueChange="@ChangeSelection"></SfCheckBox>
+                    </div>
+                </td>
+            </tr>
+            <tr style="height: 50px">
+                <td style="width: 60%">
+                    <div>Maximum Label Width:</div>
+                </td>
+                <td style="width: 40%;">
+                    <div style='margin-top: 0px;'>
+                        <SfNumericTextBox TValue="int?" Value="@Width" Max=120 Min=1 Step=1>
+                            <NumericTextBoxEvents TValue="int?" ValueChange="ChangeValue"/>
+                        </SfNumericTextBox>                        
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+@code{
+    private Boolean EnableTrim = false, IsTrim = false;
+	public int LabelWidth = 34, Width = 34;
+    LabelIntersectAction IntersectAction = LabelIntersectAction.Hide;
+	EdgeLabelPlacement LabelPlacement = EdgeLabelPlacement.None;
+	AxisPosition LabelPosition = AxisPosition.Outside;
+
+    public string DropVal = "Hide";    
+    public string DropVal2 = "None";   
+    public string DropVal3 = "Outside";     
+
+    public class SelectionTypes
+    {
+        public string Type { get; set; }
+
+        public string Code { get; set; }
+    }
+
+    List<SelectionTypes> InterSectAction = new List<SelectionTypes>
+{
+       
+        new SelectionTypes() { Type = "Hide", Code = "Y" },
+        new SelectionTypes() { Type = "Trim", Code = "X" },
+        new SelectionTypes() { Type = "Wrap", Code = "Y" },
+        new SelectionTypes() { Type = "MultipleRows", Code = "Y" },
+        new SelectionTypes() { Type = "Rotate45", Code = "Y" },
+        new SelectionTypes() { Type = "Rotate90", Code = "Y" },  
+         new SelectionTypes() { Type = "None", Code = "XY" },     
+        
+    };
+
+      List<SelectionTypes> EdgePlacement = new List<SelectionTypes>
+{
+        new SelectionTypes() { Type = "None", Code = "XY" },
+        new SelectionTypes() { Type = "Shift", Code = "X" },
+        new SelectionTypes() { Type = "Hide", Code = "Y" },
+        
+    };
+
+     List<SelectionTypes> PositionLabel = new List<SelectionTypes>
+{
+        new SelectionTypes() { Type = "Outside", Code = "XY" },
+        new SelectionTypes() { Type = "Inside", Code = "X" },
+        
+        
+    };
+
+    private void ChangeSelection(Syncfusion.Blazor.Buttons.ChangeEventArgs args)
+    {
+        EnableTrim = IsTrim = args.Checked;
+    }
+    public void ChangeValue(Syncfusion.Blazor.Inputs.ChangeEventArgs args)
+    {
+		LabelWidth = Width = Convert.ToInt32(args.Value);
+    }
+    public void ChangeIntersectAction(Syncfusion.Blazor.DropDowns.ChangeEventArgs<string> args)
+    {
+        this.IntersectAction = (LabelIntersectAction)Enum.Parse(typeof(LabelIntersectAction), args.Value.ToString(), true);
+    }
+     public void ChangeLabelPlacement(Syncfusion.Blazor.DropDowns.ChangeEventArgs<string> args)
+    {
+        this.LabelPlacement = (EdgeLabelPlacement)Enum.Parse(typeof(EdgeLabelPlacement), args.Value.ToString(), true);
+    }
+     public void ChangeLabelPosition(Syncfusion.Blazor.DropDowns.ChangeEventArgs<string> args)
+    {
+        this.LabelPosition = (AxisPosition)Enum.Parse(typeof(AxisPosition), args.Value.ToString(), true);
+    }
+    public class CategoryData
+    {
+        public string x { get; set; }
+        public double y { get; set; }
+    }
+    public List<CategoryData> ChartData = new List<CategoryData>
+{
+        new CategoryData { x = "South Korea", y = 39 },
+        new CategoryData { x = "India", y = 61 },
+        new CategoryData { x = "Pakistan", y = 20 },
+        new CategoryData { x = "Germany", y = 65 },
+        new CategoryData { x = "Australia", y = 16 },
+        new CategoryData { x = "Italy", y = 29 },
+        new CategoryData { x = "France", y = 45 },
+        new CategoryData { x = "United Arab Emirates", y = 10 },
+        new CategoryData { x = "Russia", y = 41 },
+        new CategoryData { x = "Mexico", y = 31 },
+        new CategoryData { x = "Brazil", y = 76 },
+        new CategoryData { x = "China", y = 51 },
+     };
+    string CurrentUri;
+     void ChartLoad(ILoadedEventArgs Args)
+    {
+        CurrentUri = NavigationManager.Uri;
+        if (CurrentUri.IndexOf("material") > -1)
+        {
+            Args.Theme = ChartTheme.Material;
+        }
+        else if (CurrentUri.IndexOf("fabric") > -1)
+        {
+            Args.Theme = ChartTheme.Fabric;
+        }
+        else if (CurrentUri.IndexOf("bootstrap4") > -1)
+        {
+            Args.Theme = ChartTheme.Bootstrap4;
+        }
+        else if (CurrentUri.IndexOf("bootstrap") > -1)
+        {
+            Args.Theme = ChartTheme.Bootstrap;
+        }
+        else if (CurrentUri.IndexOf("highcontrast") > -1)
+        {
+            Args.Theme = ChartTheme.HighContrast;
+        }
+        else
+        {
+            Args.Theme = ChartTheme.Bootstrap4;
+        }
+    }
+}

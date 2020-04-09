@@ -1,0 +1,69 @@
+﻿@page "/datagrid/reorder"
+
+@using Syncfusion.Blazor.Grids
+@using Syncfusion.Blazor.DropDowns
+@using blazor_samples
+@using blazor_griddata
+@inherits SampleBaseComponent;
+
+<div class="col-lg-12 control-section">
+    <div class="content-wrapper">
+        <div class="row">
+            <SfGrid DataSource="@GridData" AllowReordering="true" AllowPaging="true">
+                <GridPageSettings PageCount="5"></GridPageSettings>
+                <GridColumns>
+                    <GridColumn Field=@nameof(OrdersDetails.OrderID) HeaderText="Order ID" IsPrimaryKey="true" TextAlign="TextAlign.Right"  Width="120"></GridColumn>
+                    <GridColumn Field=@nameof(OrdersDetails.CustomerID) HeaderText="Customer ID" Width="150"></GridColumn>
+                    <GridColumn Field=@nameof(OrdersDetails.Freight) HeaderText="Freight" TextAlign="TextAlign.Right"  Width="120" Format="C2"></GridColumn>
+                    <GridColumn Field=@nameof(OrdersDetails.ShipCity) HeaderText="Ship City" Width="150"></GridColumn>
+                    <GridColumn Field=@nameof(OrdersDetails.ShipCountry) HeaderText="Ship Country" Width="150"></GridColumn>
+                </GridColumns>
+            </SfGrid>
+
+        </div>
+    </div>
+</div>
+
+
+@code{
+
+    public List<OrdersDetails> GridData { get; set; }
+
+    public class Columns
+    {
+        public string id { get; set; }
+
+        public string name { get; set; }
+    }
+
+    private List<Columns> columns = new List<Columns>()
+    {
+        new Columns(){ id= "Order ID", name= "Order ID" },
+        new Columns(){ id= "Customer ID", name= "Customer ID" },
+        new Columns(){ id= "Freight", name= "Freight" },
+        new Columns(){ id= "Ship City", name= "Ship City" },
+        new Columns(){ id= "Ship Country", name= "Ship Country" },
+    };
+
+    public class Index
+    {
+        public string id { get; set; }
+
+        public string index { get; set; }
+    }
+
+    private List<Index> indexes = new List<Index>()
+    {
+        new Index(){ id= "1", index= "1" },
+        new Index(){ id= "2", index= "2" },
+        new Index(){ id= "3", index= "3" },
+        new Index(){ id= "4", index= "4" },
+        new Index(){ id= "5", index= "5" },
+    };
+
+
+    protected override void OnInitialized()
+    {
+        GridData = OrdersDetails.GetAllRecords();
+    }
+}

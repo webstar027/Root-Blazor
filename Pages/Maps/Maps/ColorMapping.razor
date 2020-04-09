@@ -1,0 +1,379 @@
+@page "/maps/color-mapping"
+
+@using Syncfusion.Blazor.Maps
+@using Syncfusion.Blazor.DropDowns
+@using Syncfusion.Blazor.Buttons
+@inherits SampleBaseComponent;
+
+ <div class="col-lg-9 control-section sb-property-border">
+     <div>
+    <SfMaps>
+        <MapsZoomSettings Enable="false"></MapsZoomSettings>
+        <MapsTitleSettings Text="Spring Precipitation Averages of US States">
+            <MapsTitleTextStyle Size="16px"></MapsTitleTextStyle>
+        </MapsTitleSettings>
+        <MapsLegendSettings Visible="true" Position="LegendPosition.Bottom" Height="10" Width="80%" Mode="LegendMode.Interactive">
+            <MapsLegendTitle Text="@LegendText"></MapsLegendTitle>
+            <MapsLegendTitleStyle Size="18px"></MapsLegendTitleStyle>
+        </MapsLegendSettings>
+        <MapsLayers>
+            <MapsLayer ShapeData="@MapShapeData" ShapeDataPath="state" ShapePropertyPath='@("name")' DataSource="@ColorMappingData">
+                <MapsShapeSettings Fill="#E5E5E5" ColorValuePath="@ColorValuePath">
+                    <MapsShapeBorder Width="0.2" Color="black"></MapsShapeBorder>
+                    <MapsShapeColorMappings>
+                        <MapsShapeColorMapping From="@ColorMappingFromOne" MinOpacity="@MinOpacity" MaxOpacity="MaxOpacity" To="@ColorMappingToOne" Color="@ColorMappingColorOne" Label="@ColorMappingLabelOne" Value="@ColorMappingValueOne"></MapsShapeColorMapping>
+                        <MapsShapeColorMapping From="@ColorMappingFromTwo" To="@ColorMappingToTwo" Color="@ColorMappingColorTwo" Label="@ColorMappingLabelTwo" Value="@ColorMappingValueTwo"></MapsShapeColorMapping>
+                        <MapsShapeColorMapping From="@ColorMappingFromThree" To="@ColorMappingToThree" Color="@ColorMappingColorThree" Label="@ColorMappingLabelThree" Value="@ColorMappingValueThree"></MapsShapeColorMapping>
+                        <MapsShapeColorMapping From="@ColorMappingFromFour" To="@ColorMappingToFour" Color="@ColorMappingColorFour" Label="@ColorMappingLabelFour" Value="@ColorMappingValueFour"></MapsShapeColorMapping>
+                        <MapsShapeColorMapping From="@ColorMappingFromFive" To="@ColorMappingToFive" Color="@ColorMappingColorFive" Label="@ColorMappingLabelFive" Value="@ColorMappingValueFive"></MapsShapeColorMapping>
+                        <MapsShapeColorMapping From="@ColorMappingFromSix" To="@ColorMappingToSix" Color="@ColorMappingColorSix" Label="@ColorMappingLabelSix" Value="@ColorMappingValueSix"></MapsShapeColorMapping>
+                    </MapsShapeColorMappings>
+                </MapsShapeSettings>
+                <MapsLayerTooltipSettings Visible="true" ValuePath="State" Format=" <b> ${state}</b> <br> Inches : ${inches} <br> Category : ${value}"></MapsLayerTooltipSettings>
+
+            </MapsLayer>
+        </MapsLayers>
+    </SfMaps>
+    </div>
+    <div style="float: right; margin-right: 10px;">
+        Source:
+        <a href="https://www.currentresults.com/Weather/US/average-state-precipitation-in-spring.php" target="_blank">www.currentresults.com</a>
+    </div>
+</div>
+<div class="col-lg-3 property-section">
+    &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<br>
+    <div class="property-panel-section">
+        <div class="property-panel-header">Properties</div>
+        <div class="property-panel-content">
+            <table style="width:100%" title="Properties">
+                <tbody>
+
+                    <tr style="height: 35px">
+                        <td style="width: 70%" class="property-text">
+                            Color Mapping Type
+                        </td>
+                        <td style="width: 50%">
+                            <SfDropDownList Placeholder="Select colorMapping Type" DataSource="@ColorMappingType" Value="@ColorMappingTypeValue" Width="120px">
+                                <DropDownListEvents TValue="string" ValueChange="ColorMappingValueTypeChange"></DropDownListEvents>
+                                <DropDownListFieldSettings Text="Name" Value="Value"></DropDownListFieldSettings>
+                            </SfDropDownList>
+                        </td>
+                    </tr>
+                    <tr style="height: 35px"></tr>
+                    <tr style="height: 35px;width:70%;display:@display">
+                        <td style="width: 90%" class="property-text">
+                            Change Opacity
+                        </td>
+                        <td style="width: 50%">
+                            <SfCheckBox ValueChange="OpacityChange" Checked="@OpacityChecked" ></SfCheckBox>
+                        </td>
+                    </tr>
+                    <tr style="height:60px">
+                        <td>
+                            <div style="display:@MinDisplay">Min Opacity </div>
+                        </td>
+                        <td>
+                            <div>
+                                <input type="range" value="@MinRange" min="0" max="1" step="0.1" @onchange="MinRangeChange" style="display: @MinDisplay" />
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div style="display:@MinDisplay">Max Opacity </div>
+                        </td>
+                        <td>
+                            <div>
+                                <input type="range" value="@MaxRange" min="0" max="1" step="0.1" @onchange="MaxRangeChange" style="display: @MinDisplay" />
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@code {
+    public string ColorMappingTypeValue = "Range";
+    public string LegendText = "Inches";
+    public string MinDisplay = "none";
+    public double MinOpacity = 0;
+    public double MaxOpacity = 0;
+    public double MinRange = 0.5;
+    public string display = "none";
+    public double MaxRange = 1;
+    public Boolean OpacityChecked;
+    private void OpacityChange(Syncfusion.Blazor.Buttons.ChangeEventArgs args)
+    {
+        OpacityChecked = args.Checked;
+        if (OpacityChecked == true)
+        {
+            MinDisplay = "block";
+        }
+        else
+        {
+            MinDisplay = "none";
+        }
+    }
+    private void MinRangeChange(Microsoft.AspNetCore.Components.ChangeEventArgs args)
+    {
+        MinRange = Convert.ToDouble(args.Value);
+        MinOpacity = MinRange;
+    }
+    private void MaxRangeChange(Microsoft.AspNetCore.Components.ChangeEventArgs args)
+    {
+        MaxRange = Convert.ToDouble(args.Value);
+        MaxOpacity = MaxRange;
+    }
+    public class type
+    {
+        public string Value { get; set; }
+        public string Name { get; set; }
+    };
+    public List<type> ColorMappingType = new List<type> {
+        new type { Value="Range", Name="Range" },
+        new type { Value="Equal", Name="Equal" },
+        new type { Value="Desaturation", Name="Desaturation" }
+    };
+    public string ColorValuePath = "inches";
+    public double? ColorMappingFromOne = 0.1;
+    public double? ColorMappingToOne = 1;
+    public string[] ColorMappingColorOne = { "#DEEBAE" };
+    public string ColorMappingLabelOne = "0 - 1";
+    public string ColorMappingValueOne = null;
+
+    public double? ColorMappingFromTwo = 1;
+    public double? ColorMappingToTwo = 2;
+    public string[] ColorMappingColorTwo = { "#A4D6AD" };
+    public string ColorMappingLabelTwo = "1 - 2";
+    public string ColorMappingValueTwo = null;
+
+    public double? ColorMappingFromThree = 2;
+    public double? ColorMappingToThree = 3;
+    public string[] ColorMappingColorThree = { "#37AFAB" };
+    public string ColorMappingLabelThree = "2 - 3";
+    public string ColorMappingValueThree = null;
+
+    public double? ColorMappingFromFour = 3;
+    public double? ColorMappingToFour = 4;
+    public string[] ColorMappingColorFour = { "#547C84" };
+    public string ColorMappingLabelFour = "3 - 4";
+    public string ColorMappingValueFour = null;
+
+    public double? ColorMappingFromFive = 4;
+    public double? ColorMappingToFive = 5;
+    public string[] ColorMappingColorFive = { "#CEBF93" };
+    public string ColorMappingLabelFive = "4 - 5";
+    public string ColorMappingValueFive = null;
+
+    public double? ColorMappingFromSix = 5;
+    public double? ColorMappingToSix = 6;
+    public string[] ColorMappingColorSix = { "#a69d70" };
+    public string ColorMappingLabelSix = "5 - 6";
+    public string ColorMappingValueSix = null;
+
+    private void ColorMappingValueTypeChange(Syncfusion.Blazor.DropDowns.ChangeEventArgs<string> args)
+    {
+        ColorMappingTypeValue = args.Value;
+        if (ColorMappingTypeValue == "Range")
+        {
+            MinDisplay = "none";
+            display = "none";
+            OpacityChecked = false;
+            LegendText = "Inches";
+            ColorValuePath = "inches";
+            ColorMappingFromOne = 0.1;
+            ColorMappingToOne = 1;
+            ColorMappingColorOne = new string[] { "#DEEBAE" };
+            ColorMappingLabelOne = "0 - 1";
+            ColorMappingValueOne = null;
+
+            ColorMappingFromTwo = 1;
+            ColorMappingToTwo = 2;
+            ColorMappingColorTwo = new string[] { "#A4D6AD" };
+            ColorMappingLabelTwo = "1 - 2";
+            ColorMappingValueTwo = null;
+
+            ColorMappingFromThree = 2;
+            ColorMappingToThree = 3;
+            ColorMappingColorThree = new string[] { "#37AFAB" };
+            ColorMappingLabelThree = "2 - 3";
+            ColorMappingValueThree = null;
+
+            ColorMappingFromFour = 3;
+            ColorMappingToFour = 4;
+            ColorMappingColorFour = new string[] { "#547C84" };
+            ColorMappingLabelFour = "3 - 4";
+            ColorMappingValueFour = null;
+
+            ColorMappingFromFive = 4;
+            ColorMappingToFive = 5;
+            ColorMappingColorFive = new string[] { "#CEBF93" };
+            ColorMappingLabelFive = "4 - 5";
+            ColorMappingValueFive = null;
+
+            ColorMappingFromSix = 5;
+            ColorMappingToSix = 6;
+            ColorMappingColorSix = new string[] { "#a69d70" };
+            ColorMappingLabelSix = "5 - 6";
+            ColorMappingValueSix = null;
+        }
+        else if (ColorMappingTypeValue == "Equal")
+        {
+            MinDisplay = "none";
+            display = "none";
+            OpacityChecked = false;
+            LegendText = "Category";
+            ColorValuePath = "value";
+            ColorMappingFromOne = null;
+            ColorMappingToOne = null;
+            ColorMappingColorOne = new string[] { "#DEEBAE" };
+            ColorMappingLabelOne = null;
+            ColorMappingValueOne = "Low";
+
+            ColorMappingFromTwo = null;
+            ColorMappingToTwo = null;
+            ColorMappingColorTwo = new string[] { "#A4D6AD" };
+            ColorMappingLabelTwo = null;
+            ColorMappingValueTwo = "Moderate";
+
+            ColorMappingFromThree = null;
+            ColorMappingToThree = null;
+            ColorMappingColorThree = new string[] { "#37AFAB" };
+            ColorMappingLabelThree = null;
+            ColorMappingValueThree = "High";
+
+            ColorMappingFromFour = null;
+            ColorMappingToFour = null;
+            ColorMappingColorFour = null;
+            ColorMappingLabelFour = null;
+            ColorMappingValueFour = null;
+
+            ColorMappingFromFive = null;
+            ColorMappingToFive = null;
+            ColorMappingColorFive = null;
+            ColorMappingLabelFive = null;
+            ColorMappingValueFive = null;
+
+            ColorMappingFromSix = null;
+            ColorMappingToSix = null;
+            ColorMappingColorSix = null;
+            ColorMappingLabelSix = null;
+            ColorMappingValueSix = null;
+        }
+        else
+        {
+            display = "block";
+            LegendText = "Inches";
+            ColorValuePath = "inches";
+            ColorMappingFromOne = 0.1;
+            ColorMappingToOne = 6;
+            ColorMappingColorOne = new string[] { "#F0D6AD", "#19547B" };
+            ColorMappingLabelOne = null;
+            ColorMappingValueOne = null;
+
+            ColorMappingFromTwo = null;
+            ColorMappingToTwo = null;
+            ColorMappingColorTwo = null;
+            ColorMappingLabelTwo = null;
+            ColorMappingValueTwo = null;
+
+            ColorMappingFromThree = null;
+            ColorMappingToThree = null;
+            ColorMappingColorThree = null;
+            ColorMappingLabelThree = null;
+            ColorMappingValueThree = null;
+
+            ColorMappingFromFour = null;
+            ColorMappingToFour = null;
+            ColorMappingColorFour = null;
+            ColorMappingLabelFour = null;
+            ColorMappingValueFour = null;
+
+            ColorMappingFromFive = null;
+            ColorMappingToFive = null;
+            ColorMappingColorFive = null;
+            ColorMappingLabelFive = null;
+            ColorMappingValueFive = null;
+
+            ColorMappingFromSix = null;
+            ColorMappingToSix = null;
+            ColorMappingColorSix = null;
+            ColorMappingLabelSix = null;
+            ColorMappingValueSix = null;
+        }
+    }
+
+    public MapDataSettings MapShapeData = new MapDataSettings
+    {
+        async = true,
+        dataOptions = "scripts/MapsData/usa.json",
+        type = "GET"
+    };
+
+    public class MapDataSettings
+    {
+        public Boolean async { get; set; }
+        public String dataOptions { get; set; }
+        public String type { get; set; }
+    };
+    public class ColorMappingDatasource
+    {
+        public string state;
+        public double inches;
+        public string value;
+    }
+    public List<ColorMappingDatasource> ColorMappingData = new List<ColorMappingDatasource> {
+        new ColorMappingDatasource {state= "Alabama",inches= 5.37, value= "High" },
+        new ColorMappingDatasource {state= "Alaska", inches=1.15, value= "Low" },
+        new ColorMappingDatasource {state= "Arizona", inches=0.77, value= "Low" },
+        new ColorMappingDatasource {state= "Arkansas", inches=4.99, value= "High" },
+        new ColorMappingDatasource {state= "California", inches=1.93, value= "Low" },
+        new ColorMappingDatasource {state= "Colorado", inches=1.56, value= "Low" },
+        new ColorMappingDatasource {state= "Connecticut", inches=4.35, value= "Moderate" },
+        new ColorMappingDatasource {state= "Delaware", inches=4.01, value= "High" },
+        new ColorMappingDatasource {state= "Florida", inches=3.63, value= "Moderate" },
+        new ColorMappingDatasource {state= "Georgia", inches=4.16, value= "High" },
+        new ColorMappingDatasource {state= "Hawaii", inches=5.94, value= "High" },
+        new ColorMappingDatasource {state= "Idaho", inches=1.75, value= "Low" },
+        new ColorMappingDatasource {state= "Illinois", inches=3.79, value= "Moderate" },
+        new ColorMappingDatasource {state= "Indiana", inches=3.94, value= "Moderate" },
+        new ColorMappingDatasource {state= "Iowa", inches=3.25, value= "Moderate" },
+        new ColorMappingDatasource {state= "Kansas", inches=3.00, value= "Moderate" },
+        new ColorMappingDatasource {state= "Kentucky", inches=4.61, value= "High" },
+        new ColorMappingDatasource {state= "Louisiana", inches=5.22, value= "High" },
+        new ColorMappingDatasource {state= "Maine", inches=3.49, value= "Moderate" },
+        new ColorMappingDatasource {state= "Maryland", inches=3.93, value= "Moderate" },
+        new ColorMappingDatasource {state= "Massachusetts", inches=4.06, value= "High" },
+        new ColorMappingDatasource {state= "Michigan", inches=2.62, value= "Moderate" },
+        new ColorMappingDatasource {state= "Minnesota", inches=2.19, value= "Moderate" },
+        new ColorMappingDatasource {state= "Mississippi", inches=5.77, value= "High" },
+        new ColorMappingDatasource {state= "Missouri", inches=4.12, value= "High" },
+        new ColorMappingDatasource {state= "Montana",inches=1.51, value= "Low" },
+        new ColorMappingDatasource {state= "Nebraska",inches=2.60, value= "Moderate" },
+        new ColorMappingDatasource {state= "Nevada",inches=0.96, value= "Low" },
+        new ColorMappingDatasource {state= "New Hampshire",inches=3.54, value= "Moderate" },
+        new ColorMappingDatasource {state= "New Jersey",inches=4.13, value= "High" },
+        new ColorMappingDatasource {state= "New Mexico",inches=0.82, value= "Low" },
+        new ColorMappingDatasource {state= "New York",inches=3.41, value= "Moderate" },
+        new ColorMappingDatasource {state= "North Carolina",inches=4.14, value= "High" },
+        new ColorMappingDatasource {state= "North Dakota",inches=1.50, value= "Low" },
+        new ColorMappingDatasource {state= "Ohio",inches=3.53, value= "Moderate" },
+        new ColorMappingDatasource {state= "Oklahoma",inches=3.84, value= "Moderate" },
+        new ColorMappingDatasource {state= "Oregon",inches=2.33, value= "Moderate" },
+        new ColorMappingDatasource {state= "Pennsylvania",inches=3.67, value= "Moderate" },
+        new ColorMappingDatasource {state= "Rhode Island",inches=4.23, value= "High" },
+        new ColorMappingDatasource {state= "South Carolina",inches=3.83, value= "Moderate" },
+        new ColorMappingDatasource {state= "South Dakota",inches=2.17, value= "Moderate" },
+        new ColorMappingDatasource {state= "Tennessee",inches=5.15, value= "High" },
+        new ColorMappingDatasource {state= "Texas",inches=2.50, value= "Moderate" },
+        new ColorMappingDatasource {state= "Utah",inches=1.16, value= "Low" },
+        new ColorMappingDatasource {state= "Vermont",inches=3.40, value= "Moderate" },
+        new ColorMappingDatasource {state= "Virginia",inches=3.91, value= "Moderate" },
+        new ColorMappingDatasource {state= "Washington",inches=2.90, value= "Moderate" },
+        new ColorMappingDatasource {state= "West Virginia",inches=4.06, value= "High" },
+        new ColorMappingDatasource {state= "Wisconsin",inches=2.73, value= "Moderate" },
+        new ColorMappingDatasource {state= "Wyoming",inches=1.42, value= "Low" }
+    };
+} 

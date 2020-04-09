@@ -1,0 +1,83 @@
+@page "/file-manager/api"
+
+@using Syncfusion.Blazor.FileManager;
+@using Syncfusion.Blazor.Buttons;
+
+@inject IJSRuntime JsRuntime;
+
+@inherits SampleBaseComponent;
+
+<div class="col-lg-8 control-section">
+    <div class="control_wrapper">
+        <SfFileManager>
+            <FileManagerAjaxSettings Url="https://ej2-aspcore-service.azurewebsites.net/api/FileManager/Fileoperations"
+                                     UploadUrl="https://ej2-aspcore-service.azurewebsites.net/api/FileManager/Upload"
+                                     DownloadUrl="https://ej2-aspcore-service.azurewebsites.net/api/FileManager/Download"
+                                     GetImageUrl="https://ej2-aspcore-service.azurewebsites.net/api/FileManager/GetImage">
+            </FileManagerAjaxSettings>
+            <FileManagerToolbarSettings Visible="@Visible"></FileManagerToolbarSettings>
+            <FileManagerNavigationPaneSettings Visible=false></FileManagerNavigationPaneSettings>
+        </SfFileManager>
+    </div>
+</div>
+<div class="col-lg-4 property-section">
+    <div class="property-panel-header">
+        Properties
+    </div>
+    <div class="row property-panel-content">
+        <div class="card-body">
+            <div class="form-group row">
+                <label for="settings-bubble-up-input" class="col-sm-4 col-form-label form-label">Toolbar</label>
+                <div class="col-sm-8">
+                    <SfCheckBox @bind-Checked="@Check" Name="toolbar" ValueChange="OnToolbarChange"></SfCheckBox>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    private bool Check { get; set; } = true;
+    private bool Visible { get; set; } = true;
+
+    private void OnToolbarChange(Syncfusion.Blazor.Buttons.ChangeEventArgs args)
+    {
+        this.Visible = args.Checked;
+    }
+}
+
+<style>
+    .property-panel-table div {
+        padding-left: 0;
+        padding-top: 0;
+    }
+
+    #property tr {
+        height: 50px;
+    }
+
+    #tool {
+        padding-top: 5px;
+    }
+
+    #tool_toggle {
+        width: 100px;
+    }
+
+    .form-label {
+        margin-bottom: 0;
+        font-size: 12px;
+        line-height: 1.5;
+        font-size: 13px;
+        font-weight: 500;
+    }
+    .row {
+        margin-left: 0px;
+        margin-right: 0px;
+     }
+
+    .row-header {
+        font-size: 13px;
+        font-weight: 500;
+     }
+</style>

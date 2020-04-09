@@ -1,0 +1,82 @@
+﻿@page "/chart/step-area"
+@using Syncfusion.Blazor.Charts
+@inject NavigationManager NavigationManager
+@inherits SampleBaseComponent;
+
+<div class="control-section">
+    <SfChart Title="Electricity- Production">
+     <ChartEvents Load="ChartLoad"/>
+        <ChartArea><ChartAreaBorder Width="0"></ChartAreaBorder></ChartArea>
+        <ChartPrimaryXAxis EdgeLabelPlacement="EdgeLabelPlacement.Shift">
+            <ChartAxisMajorGridLines Width="0"></ChartAxisMajorGridLines>
+        </ChartPrimaryXAxis>
+        <ChartPrimaryYAxis Title="Production (Billion as kWh)" LabelFormat="{value}B">
+            <ChartAxisLineStyle Width="0"></ChartAxisLineStyle>
+            <ChartAxisMajorTickLines Width="0"></ChartAxisMajorTickLines>
+        </ChartPrimaryYAxis>
+        <ChartTooltipSettings Enable="true"></ChartTooltipSettings>
+        <ChartSeriesCollection>
+            <ChartSeries DataSource="@ChartData" Name="Renewable" XName="xValue" Width="2"
+                         YName="yValue" Type="ChartSeriesType.StepArea">
+            </ChartSeries>
+            <ChartSeries DataSource="@ChartData" Name="Non-Renewable" XName="xValue" Width="2"
+                         YName="yValue1" Type="ChartSeriesType.StepArea">
+            </ChartSeries>
+        </ChartSeriesCollection>
+    </SfChart>
+</div>
+
+@code{
+
+        public class StepAreaChartData
+        {
+            public double xValue { get; set; }
+            public double yValue { get; set; }
+            public double yValue1 { get; set; }
+        }
+
+        public List<StepAreaChartData> ChartData = new List<StepAreaChartData>
+        {
+            new StepAreaChartData { xValue = 2000, yValue = 416, yValue1 = 180 },
+            new StepAreaChartData { xValue = 2001, yValue = 490, yValue1 = 240 },
+            new StepAreaChartData { xValue = 2002, yValue = 470, yValue1 = 370 },
+            new StepAreaChartData { xValue = 2003, yValue = 500, yValue1 = 200 },
+            new StepAreaChartData { xValue = 2004, yValue = 449, yValue1 = 229 },
+            new StepAreaChartData { xValue = 2005, yValue = 470, yValue1 = 210 },
+            new StepAreaChartData { xValue = 2006, yValue = 437, yValue1 = 337 },
+            new StepAreaChartData { xValue = 2007, yValue = 458, yValue1 = 258 },
+            new StepAreaChartData { xValue = 2008, yValue = 500, yValue1 = 300 },
+            new StepAreaChartData { xValue = 2009, yValue = 473, yValue1 = 173 },
+            new StepAreaChartData { xValue = 2010, yValue = 520, yValue1 = 220 },
+            new StepAreaChartData { xValue = 2011, yValue = 509, yValue1 = 309 },
+        };
+string CurrentUri;
+        void ChartLoad(ILoadedEventArgs Args)
+    {
+        CurrentUri = NavigationManager.Uri;
+        if (CurrentUri.IndexOf("material") > -1)
+        {
+            Args.Theme = ChartTheme.Material;
+        }
+        else if (CurrentUri.IndexOf("fabric") > -1)
+        {
+            Args.Theme = ChartTheme.Fabric;
+        }
+        else if (CurrentUri.IndexOf("bootstrap4") > -1)
+        {
+            Args.Theme = ChartTheme.Bootstrap4;
+        }
+        else if (CurrentUri.IndexOf("bootstrap") > -1)
+        {
+            Args.Theme = ChartTheme.Bootstrap;
+        }
+        else if (CurrentUri.IndexOf("highcontrast") > -1)
+        {
+            Args.Theme = ChartTheme.HighContrast;
+        }
+        else
+        {
+            Args.Theme = ChartTheme.Bootstrap4;
+        }
+    }
+}

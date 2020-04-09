@@ -1,0 +1,75 @@
+﻿@page "/tree-grid/header-template"
+
+@using Syncfusion.Blazor.TreeGrid
+@using Syncfusion.Blazor.Grids
+@*Hidden:Lines*@
+@inject Microsoft.AspNetCore.Components.NavigationManager UriHelper
+@using ej2_blazor_wrapdata
+@inherits SampleBaseComponent;
+@*End:Hidden*@
+
+
+<div class="col-lg-12 control-section">
+    <div class="content-wrapper">
+        <div class="row">
+            <SfTreeGrid DataSource="@TreeData" IdMapping="TaskId" ParentIdMapping="ParentId" TreeColumnIndex="0" Height="315">
+                <TreeGridColumns>
+                    <TreeGridColumn Field="TaskName" HeaderText="Task Name" Width="240">
+                        <HeaderTemplate>
+                            @{
+                                <div class="image">
+                                    <img src="@UriHelper.ToAbsoluteUri($"images/TreeGrid/__Task name.png")" width="20" height="20" style="margin-right: 8px" />Task Name
+                                </div>
+                            }
+                        </HeaderTemplate>
+                    </TreeGridColumn>
+                    <TreeGridColumn Field="StartDate" HeaderText="Start Date" Width="120" Type=ColumnType.Date Format="d" TextAlign="TextAlign.Right">
+                        <HeaderTemplate>
+                            <div class="image">
+                                <img src="@UriHelper.ToAbsoluteUri($"images/TreeGrid/__Start name.png")" width="20" height="20" style="margin-right: 8px" />Start Date
+                            </div>
+                        </HeaderTemplate>
+                    </TreeGridColumn>
+                    <TreeGridColumn Field="Resources" HeaderText="Resources" Width="110" TextAlign="TextAlign.Right">
+                        <HeaderTemplate>
+                            @{
+                                <div class="image">
+                                    <img src="@UriHelper.ToAbsoluteUri($"images/TreeGrid/__Resources.png")" width="20" height="20" style="margin-right: 8px" />Resources
+                                </div>
+                            }
+                        </HeaderTemplate>
+                    </TreeGridColumn>
+                    <TreeGridColumn Field="Duration" HeaderText="Duration" Width="110" TextAlign="TextAlign.Right">
+                        <HeaderTemplate>
+                            @{
+                                <div class="image">
+                                    <img src="@UriHelper.ToAbsoluteUri($"images/TreeGrid/__Duration.png")" width="20" height="20" style="margin-right: 8px" />Duration
+                                </div>
+                            }
+                        </HeaderTemplate>
+                    </TreeGridColumn>
+                    <TreeGridColumn Field="Progress" HeaderText="Progress" Width="110" TextAlign="TextAlign.Center">
+                        <HeaderTemplate>
+                            @{
+                                <div class="image">
+                                    <img src="@UriHelper.ToAbsoluteUri($"images/TreeGrid/__Progress.png")" width="20" height="20" style="margin-right: 8px" />Progress
+                                </div>
+                            }
+                        </HeaderTemplate>
+                    </TreeGridColumn>
+                </TreeGridColumns>
+            </SfTreeGrid>
+        </div>
+    </div>
+</div>
+
+@code {
+
+    public IEnumerable<WrapData> TreeData { get; set; }
+
+    protected override void OnInitialized()
+    {
+        this.TreeData = WrapData.GetWrapData().ToList();
+    }
+}
+

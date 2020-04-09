@@ -1,0 +1,55 @@
+﻿@page "/buttons/radio-button"
+
+@using Syncfusion.Blazor.Buttons
+
+@inherits SampleBaseComponent;
+
+<div class="control-section">
+    <div class="radio-control">
+        <h4 class="row">Select a payment method</h4>
+        <div class="row">
+            <SfRadioButton Label="Credit/Debit Card" Name="payment" Value="credit/debit" Checked="true"></SfRadioButton>
+        </div>
+        <div class="row">
+            <SfRadioButton Label="Net Banking" Name="payment" Value="netbanking"></SfRadioButton>
+        </div>
+        <div class="row">
+            <SfRadioButton Label="Cash on Delivery" Name="payment" Value="cashondelivery"></SfRadioButton>
+        </div>
+        <div class="row">
+            <SfRadioButton Label="Other Wallets" Name="payment" Value="others"></SfRadioButton>
+        </div>
+    </div>
+</div>
+<style>
+    .radio-control {
+        margin: 5% 0 5% 40%;
+    }
+
+    @@media only screen and (max-width: 700px) {
+        .radio-control {
+            margin-left: 35%;
+            margin-top: 8%;
+        }
+
+        .control-section {
+            min-height: 200px;
+        }
+    }
+
+    @@media only screen and (max-width: 500px) {
+        .radio-control {
+            margin-top: 20%;
+            margin-left: 21%;
+            margin-bottom: 27%;
+        }
+    }
+
+    .control-section .row {
+        margin: 20px 0;
+    }
+
+    .e-bigger .radio-control h4 {
+        font-size: 20px;
+    }
+</style>

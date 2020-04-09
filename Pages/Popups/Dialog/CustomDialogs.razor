@@ -1,0 +1,154 @@
+﻿@page "/dialog/custom-dialogs"
+
+@using Syncfusion.Blazor
+@using Syncfusion.Blazor.Popups
+@using Syncfusion.Blazor.Buttons
+
+@inherits SampleBaseComponent;
+
+<div id="target" class=" col-lg-12 control-section">
+    <div>
+        @if (this.ShowButton)
+        {
+            <button class="e-btn dlgbtn" @onclick="@AlertBtn">Alert</button>
+            <button class="e-btn dlgbtn" @onclick="@ConfirmBtn">Confirm</button>
+            <button class="e-btn dlgbtn" @onclick="@PromptBtn">Prompt</button>
+        }
+    </div>
+
+    <SfDialog @bind-Visible="@AlertVisibility" Target="#target" Width="250px">
+        <DialogTemplates>
+            <Header>
+                Low Battery
+            </Header>
+            <Content>
+                10% of battery remaining
+            </Content>
+        </DialogTemplates>
+        <DialogEvents OnOpen="@DialogOpen" Closed="@DialogClose"></DialogEvents>
+        <DialogButtons>
+            <DialogButton OnClick="@AlertBtnClick">
+                <DialogButtonModel Content="Dismiss" IsPrimary="true"></DialogButtonModel>
+            </DialogButton>
+        </DialogButtons>
+    </SfDialog>
+    <SfDialog @bind-Visible="@ConfirmDlgVisible" Width="400px" Target="#target" ShowCloseIcon="true">
+        <DialogTemplates>
+            <Header>
+                Delete Multiple Items
+            </Header>
+            <Content>
+                Are you sure you want to permanently delete these items ?
+            </Content>
+        </DialogTemplates>
+        <DialogEvents Opened="@DialogOpen" Closed="@DialogClose"></DialogEvents>
+        <DialogButtons>
+            <DialogButton OnClick="@ConfirmBtnClick">
+                <DialogButtonModel Content="Yes" IsPrimary="true"></DialogButtonModel>
+            </DialogButton>
+            <DialogButton OnClick="@ConfirmBtnClick">
+                <DialogButtonModel Content="No"></DialogButtonModel>
+            </DialogButton>
+        </DialogButtons>
+    </SfDialog>
+    <SfDialog ID="prompt_dialog" @bind-Visible="@PromptDlgVisible" Target="#target" Width="330px">
+        <DialogTemplates>
+            <Header>
+                Join Wi-Fi network
+            </Header>
+            <Content>
+                <table class='Table'><tbody><tr><td>SSID:</td></tr><tr><td><b>AndroidAP</b></td></tr><tr><td>Password:</td></tr><tr><td><span class='e-input-group'><input type='password' id='password' name='Required' class='e-input'></span></td></tr></tbody></table>
+            </Content>
+        </DialogTemplates>
+        <DialogEvents OnOpen="@DialogOpen" Closed="@DialogClose"></DialogEvents>
+        <DialogButtons>
+            <DialogButton OnClick="@PromptBtnClick">
+                <DialogButtonModel Content="Connect" IsPrimary="true"></DialogButtonModel>
+            </DialogButton>
+            <DialogButton OnClick="@PromptBtnClick">
+                <DialogButtonModel Content="Cancel"></DialogButtonModel>
+            </DialogButton>
+        </DialogButtons>
+    </SfDialog>
+</div>
+<style>
+    .e-btn-hide {
+        display: none;
+    }
+
+    .Table {
+        border-collapse: separate;
+        border-spacing: 10px;
+        width: 85%;
+        margin: 0px -5px 0px;
+    }
+
+    .dlgbtn {
+        margin-right: 10px;
+    }
+
+    #target {
+        height: 460px;
+        min-height: 350px;
+    }
+
+    .dlgbtn {
+        margin-right: 10px;
+    }
+
+    .fabric #target #prompt_dialog.e-dialog {
+        height: 291px;
+    }
+
+    .material #target #prompt_dialog.e-dialog {
+        height: 270px;
+    }
+
+    #target #prompt_dialog.e-dialog {
+        height: 270px;
+    }
+
+    .bootstrap4 #target #prompt_dialog.e-dialog {
+        height: 285px;
+    }
+</style>
+
+@code {
+    public bool AlertVisibility { get; set; } = false;
+    public bool ConfirmDlgVisible { get; set; } = false;
+    public bool PromptDlgVisible { get; set; } = false;
+    public bool ShowButton { get; set; } = true;
+    private void AlertBtn()
+    {
+        this.AlertVisibility = true;
+    }
+    private void ConfirmBtn()
+    {
+        this.ConfirmDlgVisible = true;
+    }
+    private void PromptBtn()
+    {
+        this.PromptDlgVisible = true;
+    }
+    private void AlertBtnClick(Object e)
+    {
+        this.AlertVisibility = false;
+    }
+    private void ConfirmBtnClick(Object e)
+    {
+        this.ConfirmDlgVisible = false;
+    }
+    private void PromptBtnClick(Object e)
+    {
+        this.PromptDlgVisible = false;
+    }
+    private void DialogOpen(Object args)
+    {
+        this.ShowButton = false;
+    }
+
+    private void DialogClose(Object args)
+    {
+        this.ShowButton = true;
+    }
+}

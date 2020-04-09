@@ -1,0 +1,130 @@
+﻿@page "/chart/funnel"
+@using Syncfusion.Blazor.Charts
+@inject NavigationManager NavigationManager
+@inherits SampleBaseComponent;
+
+<div class="row">
+    <div class="col-lg-8 control-section">
+        <div class="control-section">
+            <SfAccumulationChart Title="Top populated countries in 2017" EnableAnimation="false">
+            <AccumulationChartEvents Load="BeforeRender"/>
+                <AccumulationChartTooltipSettings Enable="true"></AccumulationChartTooltipSettings>
+
+                <AccumulationChartLegendSettings Visible="false"></AccumulationChartLegendSettings>
+
+                <AccumulationChartSeriesCollection>
+                    <AccumulationChartSeries DataSource="@StatisticsDetails" XName="Country" YName="Users"
+                                             Type="AccumulationType.Funnel" Explode="false" NeckWidth="@NeckWidth" NeckHeight="@NeckHeight">
+                        <AccumulationDataLabelSettings Visible="true" Name="Country" Position="AccumulationLabelPosition.Outside">
+                            <AccumulationChartConnector Length="6%"></AccumulationChartConnector>
+                        </AccumulationDataLabelSettings>
+                    </AccumulationChartSeries>
+                </AccumulationChartSeriesCollection>
+            </SfAccumulationChart>
+        </div>
+    </div>
+    <div class="col-lg-4 property-section">
+        <table  title="Properties" style="width: 100%">
+            <tr style="height:50px"><th>Properties</th></tr>
+            <tr style="height: 50px">
+                <td style="width: 50%">
+                    <div>
+                        Neck Width:
+                    </div>
+                </td>
+                <td style="width: 50%;">
+                    <div data-role="rangeslider">
+                        <input type="range" @onchange="ChangeNeckWidth" value="@NeckWidthValue" min="0" max="50" style="width:90%" />
+                    </div>
+                </td>
+                <td style="width: 50%;">
+                    <div data-role="rangeslider">
+                        <p  style="font-weight: normal;padding-top:10px;"><span>@NeckWidthValue</span></p>
+                    </div>
+                </td>
+            </tr>
+            <tr style="height: 50px">
+                <td style="width: 50%">
+                    <div>
+                        Neck Height:
+                    </div>
+                </td>
+                <td style="width: 50%;">
+                    <div data-role="rangeslider">
+                        <input type="range" @onchange="ChangeNeckHeight" value="@NeckHeightValue" min="0" max="50" style="width:90%" />
+                    </div>
+                </td>
+                <td style="width: 50%;">
+                    <div data-role="rangeslider">
+                        <p  style="font-weight: normal;padding-top:10px;"><span>@NeckHeightValue</span></p>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+@code{
+    public int NeckWidthValue = 10, NeckHeightValue = 18;
+    public string NeckWidth = "10%", NeckHeight = "18%";
+    private void ChangeNeckWidth(Microsoft.AspNetCore.Components.ChangeEventArgs args)
+    {
+        NeckWidthValue = Convert.ToInt32(args.Value);
+        NeckWidth = NeckWidthValue + "%";
+    }
+    private void ChangeNeckHeight(Microsoft.AspNetCore.Components.ChangeEventArgs args)
+    {
+        NeckHeightValue = Convert.ToInt32(args.Value);
+        NeckHeight = args.Value + "%";
+    }
+
+    public class Statistics
+    {
+        public string Country;
+        public double Users;
+    }
+    public List<Statistics> StatisticsDetails = new List<Statistics>
+  {
+            new Statistics { Country = "China", Users = 1409517397 },
+            new Statistics { Country = "India", Users = 1339180127 },
+            new Statistics { Country = "United States", Users = 324459463 },
+            new Statistics { Country = "Indonesia", Users = 263991379  },
+            new Statistics { Country = "Brazil", Users = 209288278 },
+            new Statistics { Country = "Pakistan", Users = 197015955 },
+            new Statistics { Country = "Nigeria", Users = 190886311 },
+            new Statistics { Country = "Bangladesh", Users = 164669751 },
+            new Statistics { Country = "Russia", Users = 143989754 },
+            new Statistics { Country = "Mexico", Users = 129163276 },
+            new Statistics { Country = "Japan", Users = 127484450 },
+            new Statistics { Country = "Ethiopia", Users = 104957438 },
+            new Statistics { Country = "Philippines", Users = 104918090 },
+            new Statistics { Country = "Egypt", Users = 97553151 },
+            new Statistics { Country = "Vietnam", Users = 95540800 },
+            new Statistics { Country = "Germany", Users = 82114224 },
+    };
+    string CurrentUri;
+    void BeforeRender(IAccLoadedEventArgs Args)
+    {
+        CurrentUri = NavigationManager.Uri;
+        if (CurrentUri.IndexOf("material") > -1)
+        {
+            Args.Theme = AccumulationTheme.Material;
+        }
+        else if (CurrentUri.IndexOf("fabric") > -1)
+        {
+            Args.Theme = AccumulationTheme.Fabric;
+        }
+        else if (CurrentUri.IndexOf("bootstrap") > -1)
+        {
+            Args.Theme = AccumulationTheme.Bootstrap;
+        }
+        else if (CurrentUri.IndexOf("highcontrast") > -1)
+        {
+            Args.Theme = AccumulationTheme.HighContrast;
+        }
+        else
+        {
+            Args.Theme = AccumulationTheme.Bootstrap4;
+        }
+    }
+}
+

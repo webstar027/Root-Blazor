@@ -1,0 +1,13 @@
+﻿@page "/pdf-viewer/default-functionalities"
+
+@using Syncfusion.Blazor.PdfViewerServer
+
+@inherits SampleBaseComponent;
+
+<div class="control-section">
+     <SfPdfViewerServer DocumentPath="@DocumentPath" Height="640px" Width="100%"></SfPdfViewerServer>     
+</div>
+
+@code {
+    private string DocumentPath { get; set; } = "wwwroot/data/PDF_Succinctly.pdf";
+}

@@ -1,0 +1,98 @@
+﻿@page "/pivot-table/conditional-formatting"
+
+@using Syncfusion.Blazor.PivotView
+@using Syncfusion.Blazor.Buttons
+@inherits SampleBaseComponent;
+@using blazor_samples
+@using ej2_blazor_productdetails
+
+<div class="col-lg-9 control-section sb-property-border">
+    <div class="content-wrapper">
+        <SfPivotView TValue="PivotProductDetails" @ref="@Pivot" Width="100%" Height="340" ShowFieldList="true" AllowConditionalFormatting=true EnableValueSorting=true ShowTooltip=false>
+            <PivotViewDataSourceSettings DataSource="@Data" ExpandAll=false EnableSorting=true>
+                <PivotViewColumns>
+                    <PivotViewColumn Name="Year"></PivotViewColumn>
+                    <PivotViewColumn Name="Order_Source" Caption="Order Source"></PivotViewColumn>
+                </PivotViewColumns>
+                <PivotViewRows>
+                    <PivotViewRow Name="Country"></PivotViewRow>
+                    <PivotViewRow Name="Products"></PivotViewRow>
+                </PivotViewRows>
+                <PivotViewValues>
+                    <PivotViewValue Name="In_Stock" Caption="In Stock"></PivotViewValue>
+                    <PivotViewValue Name="Sold" Caption="Units Sold"></PivotViewValue>
+                </PivotViewValues>
+                <PivotViewFilters>
+                    <PivotViewFilter Name="Product_Categories" Caption="Product Categories"></PivotViewFilter>
+                </PivotViewFilters>
+                <PivotViewFormatSettings>
+                    <PivotViewFormatSetting Name="Amount" Format="C" UseGrouping=true></PivotViewFormatSetting>
+                    <PivotViewFormatSetting Name="Sold" Format="N" UseGrouping=true></PivotViewFormatSetting>
+                </PivotViewFormatSettings>
+                <PivotViewConditionalFormatSettings>
+                    <PivotViewConditionalFormatSetting Measure="In_Stock" Conditions="Condition.Between" Value1=350 Value2="385">
+                        <PivotViewStyle BackgroundColor="#219122" Color="white" FontFamily="Tahoma" FontSize="12px">
+                        </PivotViewStyle>
+                    </PivotViewConditionalFormatSetting>
+                    <PivotViewConditionalFormatSetting Measure="Sold" Conditions="Condition.Between" Value1=16000 Value2=25000>
+                        <PivotViewStyle BackgroundColor="#FF2222" Color="white" FontFamily="Tahoma" FontSize="12px">
+                        </PivotViewStyle>
+                    </PivotViewConditionalFormatSetting>
+                </PivotViewConditionalFormatSettings>
+                <PivotViewDrilledMembers>
+                    <PivotViewDrilledMember Name="Country" Items="@(new string[] { "France","Germany" })"></PivotViewDrilledMember>
+                </PivotViewDrilledMembers>
+            </PivotViewDataSourceSettings>
+            <PivotViewGridSettings ColumnWidth="120"></PivotViewGridSettings>
+        </SfPivotView>
+    </div>
+</div>
+<div class="col-lg-3 property-section">
+    &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<br>
+    <div class="property-panel-section">
+        <div class="property-panel-header" style="padding-bottom:20px; font-size:16px">Properties</div>
+        <div class="property-panel-content">
+            <table id="property" style="width:100%" class="property-panel-table">
+                <tbody>
+                    <tr style="height: 50px">
+                        <td align="center">
+                            <SfButton CssClass="apply-button" IsPrimary="true" OnClick="@OnClick">Apply Format</SfButton>
+                        </td>
+                    </tr>
+                    <tr style="height: 50px">
+                        <td align="center">
+                            <SfButton CssClass="reset-button" IsPrimary="true" OnClick="@OnResetClick">Reset All</SfButton>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<style>
+    .e-pivotview {
+        min-height: 200px;
+    }
+    .apply-button, .reset-button {
+        width: 70%;
+    }
+</style>
+
+@code{
+    SfPivotView<PivotProductDetails> Pivot;
+    public List<PivotProductDetails> Data { get; set; }
+
+    protected override void OnInitialized()
+    {
+        this.Data = PivotProductDetails.GetProductData();
+    }
+    public void OnClick(Microsoft.AspNetCore.Components.Web.MouseEventArgs args)
+    {
+        this.Pivot.ShowConditionalFormattingDialog();
+    }
+
+    public void OnResetClick(Microsoft.AspNetCore.Components.Web.MouseEventArgs args)
+    {
+        this.Pivot.DataSourceSettings.ConditionalFormatSettings = new List<PivotViewConditionalFormatSetting>();
+    }
+}

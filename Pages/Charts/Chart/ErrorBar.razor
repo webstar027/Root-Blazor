@@ -1,0 +1,72 @@
+﻿@page "/chart/error-bar"
+@using Syncfusion.Blazor.Charts
+@inject NavigationManager NavigationManager
+@inherits SampleBaseComponent;
+
+<div class="control-section">
+    <SfChart Title="Sales Distribution of Car by Region" >
+        <ChartEvents Load="ChartLoad"/>
+        <ChartArea><ChartAreaBorder Width="0"></ChartAreaBorder></ChartArea>
+        <ChartPrimaryXAxis ValueType="Syncfusion.Blazor.Charts.ValueType.Category" Interval="1">
+            <ChartAxisMajorGridLines Width="0"></ChartAxisMajorGridLines>
+        </ChartPrimaryXAxis>
+        <ChartPrimaryYAxis LabelFormat="{value}%" Minimum="15" Maximum="45">
+            <ChartAxisLineStyle Width="0"></ChartAxisLineStyle>
+            <ChartAxisMajorTickLines Width="0"></ChartAxisMajorTickLines>
+        </ChartPrimaryYAxis>
+        <ChartSeriesCollection>
+            <ChartSeries DataSource="@ChartData" Name="Sales" XName="x" YName="y" Type="ChartSeriesType.Scatter">
+                <ChartMarker Height="10" Width="10">
+                </ChartMarker>
+                <ChartErrorBarSettings Visible="true" HorizontalError="3" VerticalError="3"></ChartErrorBarSettings>
+            </ChartSeries>
+        </ChartSeriesCollection>
+        <ChartLegendSettings Visible="false"></ChartLegendSettings>
+    </SfChart>
+</div>
+
+@code{
+
+    public class ErrorBarData
+        {
+            public string x { get; set; }
+            public double y { get; set; }
+        }
+
+    public List<ErrorBarData> ChartData = new List<ErrorBarData>
+            {
+                new ErrorBarData { x= "IND", y= 24 }, 
+                new ErrorBarData { x= "AUS", y= 20 }, 
+                new ErrorBarData { x= "USA", y= 35 },
+                new ErrorBarData { x= "DEU", y= 27 }, 
+                new ErrorBarData { x= "ITA", y= 30 },
+                new ErrorBarData { x= "UK", y= 41 }, 
+                new ErrorBarData { x= "RUS", y= 26 }
+            };
+            string CurrentUri;
+
+    void ChartLoad(ILoadedEventArgs Args)
+    {
+        CurrentUri = NavigationManager.Uri;
+        if (CurrentUri.IndexOf("material") > -1)
+        {
+            Args.Theme = ChartTheme.Material;
+        }
+        else if (CurrentUri.IndexOf("fabric") > -1)
+        {
+            Args.Theme = ChartTheme.Fabric;
+        }
+        else if (CurrentUri.IndexOf("bootstrap") > -1)
+        {
+            Args.Theme = ChartTheme.Bootstrap;
+        }
+        else if (CurrentUri.IndexOf("highcontrast") > -1)
+        {
+            Args.Theme = ChartTheme.HighContrast;
+        }
+        else
+        {
+            Args.Theme = ChartTheme.Bootstrap4;
+        }
+    }
+}

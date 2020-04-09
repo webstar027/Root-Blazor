@@ -1,0 +1,198 @@
+﻿@page "/chart/axis-crossing"
+@using Syncfusion.Blazor.Charts
+@using Syncfusion.Blazor.Buttons
+@using Syncfusion.Blazor.DropDowns
+@using Syncfusion.Blazor.Inputs
+@inject NavigationManager NavigationManager
+@inherits SampleBaseComponent;
+
+<div class="row">
+    <div class="col-lg-8 control-section">
+        <SfChart Title="Spline Interpolation">
+			<ChartEvents Load="ChartLoad"/>
+            <ChartArea><ChartAreaBorder Width="0"></ChartAreaBorder></ChartArea>
+            <ChartPrimaryXAxis Minimum="-8" Maximum="8" Interval="2" CrossesAt="@XCrossesAt" MinorTicksPerInterval="3" PlaceNextToAxisLine="@PlaceX">
+                <ChartAxisMajorGridLines Width="0"></ChartAxisMajorGridLines>
+            </ChartPrimaryXAxis>
+            <ChartPrimaryYAxis Minimum="-8" Maximum="8" Interval="2" CrossesAt="@YCrossesAt" MinorTicksPerInterval="3" PlaceNextToAxisLine="@PlaceY">
+                <ChartAxisMajorTickLines Width="0"></ChartAxisMajorTickLines>
+            </ChartPrimaryYAxis>
+            <ChartTooltipSettings Enable="true"></ChartTooltipSettings>
+            <ChartSeriesCollection>
+                <ChartSeries DataSource="@LineData" Name="Line Interpolation" XName="xValue" Width="2"
+                             Opacity="1" YName="yValue1" Type="ChartSeriesType.Line" Fill="Blue">
+                </ChartSeries>
+                <ChartSeries DataSource="@SplineData" Name="Cubic Spline Interpolation" XName="xValue" Width="2"
+                             Opacity="1" YName="yValue1" Type="ChartSeriesType.Spline" Fill="Green">
+                </ChartSeries>
+                <ChartSeries DataSource="@ScatterData" Name="Data points" XName="xValue" Width="2"
+                             Opacity="1" YName="yValue1" Type="ChartSeriesType.Scatter" Fill="Red">
+                    <ChartMarker Visible="true" Width="12" Height="12">
+                    </ChartMarker>
+                </ChartSeries>
+            </ChartSeriesCollection>
+        </SfChart>
+    </div>
+    <div class="col-lg-4 property-section">
+        <table  title="Properties" style="width: 100%">
+            <tr style="height:50px"><th>Properties</th></tr>
+            <tr style="height:50px">
+                <td style="font-size:14px">
+                    Axis:
+                </td>
+                <td>
+                    <SfDropDownList TValue="string" Placeholder="Normal" TItem="Data" DataSource="@DropDownData" @bind-Value="@Value">
+                        <DropDownListFieldSettings Value="ID"></DropDownListFieldSettings>
+                        <DropDownListEvents TValue="string" ValueChange="ChangeAxis"></DropDownListEvents>
+                    </SfDropDownList>
+                </td>
+            </tr>
+            <tr style="height: 50px">
+                <td style="width: 60%">
+                    <div>Crosses Value:</div>
+                </td>
+                <td style="width: 40%;">
+                    <div style='margin-top: 0px;'>
+                        <SfNumericTextBox TValue="int?" Value="@CrossValue" Max=8 Min=-8 Step=2>
+                            <NumericTextBoxEvents TValue="int?" ValueChange="ChangeCrossValue" />
+                        </SfNumericTextBox>
+                        
+                    </div>
+                </td>
+            </tr>
+            <tr style="height: 50px">
+                <td style="width: 50%">
+                    <div>Placing Label Near to Axis Line: </div>
+                </td>
+                <td style="width: 50%;">
+                    <div>
+                        <SfCheckBox Checked="@IsChecked" ValueChange="@CheckValue"></SfCheckBox>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+@code{
+    public bool PlaceX = true, PlaceY = true, IsChecked = true;
+    public string Value = "X";
+    public int CrossValue = 0, XCrossesAt = 0, YCrossesAt = 0;
+
+
+    public class Data
+    {
+        public string ID { get; set; }
+    }
+
+    private List<Data>
+    DropDownData = new List<Data>
+        ()
+        {
+        new Data(){ ID= "X"},
+        new Data(){ ID= "Y"}      
+        };
+    private void CheckValue(Syncfusion.Blazor.Buttons.ChangeEventArgs args)
+    {
+        IsChecked = args.Checked;
+        if (Value == "X")
+        {
+            PlaceX = args.Checked;
+        }
+        else
+        {
+            PlaceY = args.Checked;
+        }
+    }
+
+    private void ChangeAxis(Syncfusion.Blazor.DropDowns.ChangeEventArgs<string> args)
+    {
+        Value = Convert.ToString(args.Value);
+        if (Value == "X")
+        {
+            IsChecked = PlaceX;
+            CrossValue = +XCrossesAt;
+        }
+        else
+        {
+            IsChecked = PlaceY;
+            CrossValue = +YCrossesAt;
+        }
+    }
+
+    private void ChangeCrossValue(Syncfusion.Blazor.Inputs.ChangeEventArgs args)
+    {
+        if (Value == "X")
+        {
+            XCrossesAt = Convert.ToInt32(args.Value);
+        }
+        else
+        {
+            YCrossesAt = Convert.ToInt32(args.Value);
+        }
+    }
+
+    public class AxisData
+    {
+        public Nullable<double> xValue { get; set; }
+        public Nullable<double> yValue1 { get; set; }
+    }
+    public List<AxisData> ScatterData = new List<AxisData>
+{
+                new AxisData { xValue = -6, yValue1 = 2},
+                new AxisData { xValue = -3, yValue1 = -4 },
+                new AxisData { xValue = 1.5, yValue1 = 3.5 },
+                new AxisData { xValue = 6, yValue1 = 4.5}
+            };
+    public List<AxisData> SplineData = new List<AxisData>
+{
+                new AxisData { xValue = -6, yValue1 = 2},
+                new AxisData { xValue = -5.291, yValue1 = 0 },
+                new AxisData { xValue = -5, yValue1 = -0.774},
+                new AxisData { xValue = -3, yValue1 = -4},
+                new AxisData { xValue = -0.6, yValue1 = -0.965},
+                new AxisData { xValue = -0.175, yValue1 = 0.1},
+                new AxisData { xValue = 0, yValue1 = 0.404},
+                new AxisData { xValue = 1.5, yValue1 = 3.5},
+                new AxisData { xValue = 3.863, yValue1 = 5.163},
+                new AxisData { xValue = 6, yValue1 = 4.5}
+            };
+    public List<AxisData> LineData = new List<AxisData>
+{
+                new AxisData { xValue = -6, yValue1 = 2},
+                new AxisData { xValue = -5, yValue1 = 0 },
+                new AxisData { xValue = -4.511, yValue1 = -0.977},
+                new AxisData { xValue = -3, yValue1 = -4},
+                new AxisData { xValue = -1.348, yValue1 = -1.247},
+                new AxisData { xValue = -0.6, yValue1 = 0},
+                new AxisData { xValue = 0, yValue1 = 1},
+                new AxisData { xValue = 1.5, yValue1 = 3.5},
+                new AxisData { xValue = 6, yValue1 = 4.5}
+            };
+
+    string CurrentUri;
+
+    void ChartLoad(ILoadedEventArgs Args)
+    {
+        CurrentUri = NavigationManager.Uri;
+        if (CurrentUri.IndexOf("material") > -1)
+        {
+            Args.Theme = ChartTheme.Material;
+        }
+        else if (CurrentUri.IndexOf("fabric") > -1)
+        {
+            Args.Theme = ChartTheme.Fabric;
+        }
+        else if (CurrentUri.IndexOf("bootstrap") > -1)
+        {
+            Args.Theme = ChartTheme.Bootstrap;
+        }
+        else if (CurrentUri.IndexOf("highcontrast") > -1)
+        {
+            Args.Theme = ChartTheme.HighContrast;
+        }
+        else
+        {
+            Args.Theme = ChartTheme.Bootstrap4;
+        }
+    }
+}
